@@ -43,15 +43,15 @@ def throwPhoton(grain, verbose = False):
     
     # Printing results
     if verbose:
-        print("   - A photon appeared in column ", start_pos, "!")
-        print("   - It have an energy of ", round(energy,3), " eV")
+        print("   - A photon appeared at line ", start_pos, "!")
+        print("   - It has an energy of ", round(energy,3), " eV")
         if hit_pos == -1:
             print("❌ - But... it missed the grain")
         else:
-            print("✅ - It hitted the grain at line ", start_pos, ", column ", hit_pos, "!")
-            print("   - In this condition, the photon will travel ", round(da,3), "angstroms trhough the grain")
+            print("✅ - It hit the grain at line ", start_pos, ", column ", hit_pos, "!")
+            print("   - In these conditions, the photon will travel ", round(da,3), "angstroms through the grain")
             if x == -1:
-                print("❌ - And... this distance was to hight, it passed trhough the grain :/")
+                print("❌ - And... this distance was too high, it passed trhough the grain :/")
             else:
                 print("✅ - Oh, it was absorbed at column ", x)
 
@@ -60,7 +60,7 @@ def throwPhoton(grain, verbose = False):
         E0 = 8
         electron_emitted = rand() < 0.5*(1+numpy.tanh((energy-E0)/2))
         if verbose:
-            print("   - In this conditions, the probability of emitting an electron is ", round(0.5*(1+numpy.tanh((energy-E0)/2)),3))
+            print("   - In these conditions, the probability of emitting an electron is ", round(0.5*(1+numpy.tanh((energy-E0)/2)),3))
             if electron_emitted:
                 print("✅ - An electron has been emitted!")
             else:
@@ -71,7 +71,7 @@ def throwPhoton(grain, verbose = False):
             le = 10 # 10^-6 cm = 100 angstrom -> 100 pixels
             de = utils.randomInDistrib(lambda x: numpy.exp(-x/le) / le,0,100)
             if verbose:
-                print("   - In this condition, the electron will travel ", round(de,3), "angstroms trhough the grain")
+                print("   - In these conditions, the electron will travel ", round(de,3), "angstroms through the grain")
 
             # Getting absorbtion position
 
