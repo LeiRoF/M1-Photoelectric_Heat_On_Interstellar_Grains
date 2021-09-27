@@ -1,5 +1,6 @@
 import numpy as np
 import pylab as pl
+import os
 
 from GRF_routines import addGRF
 
@@ -12,14 +13,44 @@ from GRF_routines import addGRF
 
 # Tunable parameters
 # - Main parameters
-N = 100              # size of the grain image
-sigma_dens = 1.0     # Width of the density distribution
-beta = 3.0           # Slope of the power spectrum (=probability density function=PDF) for k>Kmin
+N = 100             # size of the grain image
+sigma_dens = 1.0    # Width of the density distribution
+beta = 3.0         # Slope of the power spectrum (=probability density function=PDF) for k>Kmin
+
+lock = True
+while lock:
+   size = input("Size of the grain (int>0, default:100): ")
+   try:
+      size = int(size)
+      lock = False
+   except ValueError:
+      print("Invalid value")
+   #if type(size) == int and size > 0:
+
+lock = True
+while lock:
+   sigma_dens = input("Width of the density distribution (float>0, default:1.0): ")
+   try:
+      sigma_dens = float(sigma_dens)
+      lock = False
+   except ValueError:
+      print("Invalid value")
+
+lock = True
+while lock:
+   beta = input("Slope of the power spectrum (float>0, default:3.0): ")
+   try:
+      beta = float(beta)
+      lock = False
+   except ValueError:
+      print("Invalid value")
+
+path_to_grain_file = "./grains/"
 
 # - Secondary parameters
 Kmin = 3             # Minimum wavenumber for PDF slope = beta
 beta_in = 4          # Slope of PDF between k=0 and Kmin
-Npad = 30            # Padding around the map to get rid of the peak near k=0
+Npad = 0           # Padding around the map to get rid of the peak near k=0
 Adens = 1.           # Mean density - should not impact dust grain
 
 doplot = 1           # Visual check of grain calculation: 0= desactivated, 1= only final plot, 2= animation of search for the main group + final plot
@@ -37,27 +68,28 @@ while ((mmax[0]<N*tol) | (mmax[0]>N*(1-tol)) | (mmax[1]<N*tol) | (mmax[1]>N*(1-t
 
    # Search the location of the max value
    mmax = np.nonzero(cube==np.amax(cube))
-   print mmax
+   print(mmax)
    ii += 1
    if (ii>1000):
-      print "Failed generating a GRF with this tolerance value:", tol
-      print "Try a lower value. It should be between 0 (very tolerant) and 0.49999 (very tough)."
+      print("Failed generating a GRF with this tolerance value:", tol)
+      print("Try a lower value. It should be between 0 (very tolerant) and 0.49999 (very tough).")
       exit()
 
 
 # Roll the cube to put the max at the center
-cube = np.roll(cube, N/2-mmax[0][0], axis=0)
-cube = np.roll(cube, N/2-mmax[1][0], axis=1)
+#cube = np.roll(cube, N/2-mmax[0][0], axis=0)
+#cube = np.roll(cube, N/2-mmax[1][0], axis=1)
 
 # Apodize the cube
 I, J = np.indices(np.shape(cube))
 Rad = (I-N/2)**2+(J-N/2)**2
-sig = N*0.1
+sig = N*0.03
 cube *= np.exp(-Rad/(2*sig**2))
 
 # Compute the location of the mass center
 cdm = [np.sum(J*cube)/np.sum(cube),np.sum(I*cube)/np.sum(cube)]
-print cdm
+
+print(cdm)
 
 # Roll the cube to put the mass center at the center
 cube = np.roll(cube, int(N/2-cdm[0]), axis=0)
@@ -112,30 +144,33 @@ mmax = np.nonzero(cube==np.amax(cube))
 grain2 = group(grain, mmax[0][0], mmax[1][0])
 
 # Write down the grain image in ASCII format (very inefficient format, but easy to control)
-np.savetxt("Grain_N%i_S%ip%i_B%ip%i.txt" % (N, int(sigma_dens), \
+if not os.path.isdir("./grains"):
+   os.makedirs("./grains")
+np.savetxt(path_to_grain_file + "Grain_N%i_S%ip%i_B%ip%i.txt" % (N, int(sigma_dens), \
                                                int((sigma_dens-int(sigma_dens))*10), \
                                                int(beta), \
                                                int((beta-int(beta))*10)), \
                                                grain2, fmt='%i')
 
 
-if (doplot>=1): 
+if (doplot>=1):
    pl.figure(figsize=(20,10))
    pl.subplot(131)
    pl.title('Original gaussian density distribution')
    pl.plot(cdm[0], cdm[1], '+k')
-   pl.imshow(np.log10(cube), origin='low', interpolation='nearest')
+   pl.imshow(np.log10(cube), origin='lower', interpolation='nearest')
    pl.colorbar(shrink=0.4)
 
    pl.subplot(132)
    pl.title('Threshold cut of the original distribution')
-   pl.imshow(grain, origin='low', cmap='bone', interpolation='nearest')
+   pl.imshow(grain, origin='lower', cmap='bone', interpolation='nearest')
    pl.colorbar(shrink=0.4)
 
    pl.subplot(133)
    pl.title('Final Grain - only the central group')
-   pl.imshow(grain2, origin='low', cmap='bone', interpolation='nearest')
+   pl.imshow(grain2, origin='lower', cmap='bone', interpolation='nearest')
    pl.colorbar(shrink=0.4)
 
    pl.show()
 
+                             
