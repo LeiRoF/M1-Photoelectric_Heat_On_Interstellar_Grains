@@ -4,7 +4,7 @@
    contain the root `toctree` directive.
 
 Welcome to the Photoelectric Heating On Interstallar Grains documentation!
-=================================
+==========================================================================
 
 Installation
 ------------
@@ -12,21 +12,25 @@ Installation
 This project was made with **Python 3.9** and can not run correctly in previous versions.
 
 1) Get the source code
-```
-git clone https://gitlab.com/LeiRoF/Photoelectric_Heating_On_Interstallar_Grains.git
-```
 
-2) Go in the source folder
-```
-cd Photoelectric_Heating_On_Interstallar_Grains
-```
+.. code-block::
 
-3) Install project dependencies
-```
-pip install -r requirements.txt`
-```
+   git clone https://gitlab.com/LeiRoF/Photoelectric_Heating_On_Interstallar_Grains.git
+
+1) Go in the source folder
+
+.. code-block::
+
+   cd Photoelectric_Heating_On_Interstallar_Grains
+
+1) Install project dependencies
+
+.. code-block::
+
+   pip install -r requirements.txt`
 
 .. toctree::
    :maxdepth: 2
    :caption: Sommaire
 
+   files_description.md
