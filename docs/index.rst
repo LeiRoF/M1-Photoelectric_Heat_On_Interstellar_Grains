@@ -17,17 +17,17 @@ This project was made with **Python 3.9** and can not run correctly in previous 
 
    git clone https://gitlab.com/LeiRoF/Photoelectric_Heating_On_Interstallar_Grains.git
 
-1) Go in the source folder
+2) Go in the source folder
 
 .. code-block::
 
    cd Photoelectric_Heating_On_Interstallar_Grains
 
-1) Install project dependencies
+3) Install project dependencies
 
 .. code-block::
 
-   pip install -r requirements.txt`
+   pip install -r requirements.txt
 
 .. toctree::
    :maxdepth: 2

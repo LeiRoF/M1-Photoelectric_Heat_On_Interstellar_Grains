@@ -10,7 +10,7 @@ def getGrainFromFile(file):
             array.append(line.split(" "))
     return numpy.array(array)
 
-def createPhoton(grain, verbose = False):
+def throwPhoton(grain, verbose = False):
     start_pos = randint(len(grain))
     energy = 3+rand()*12
     grain1D = grain[start_pos] # We consider only the dimension corresponding to the direction of the photon
@@ -37,10 +37,23 @@ def createPhoton(grain, verbose = False):
         if int(grain1D[x]):
             distBeforeAbsorbtion -= 1
         x += 1
+    if x == 100:
+        x = -1
+        photonAbsorbed = False
+    else:
+        photonAbsorbed = True
     
+    # Printing results
     if verbose:
+        print("Distance traveled in grain ", round(da,3), "angstrom")
+        print("Point of impact ", hit_pos)
         print("Absorbed at column ", x)
+
+    # Emit electron with probability Y=0.5*(1+Th[(E-E0)/2])
+    if photonAbsorbed:
+        E0 = 8
+        electron_emitted = utils.randomInDistrib(lambda x: 0.5*(1+numpy.tanh[(energy-E0)/2]))
 
 if __name__ == "__main__":
     grain = getGrainFromFile("grains/Grain_N100_S1p0_B3p0.txt")
-    createPhoton(grain, True)
+    throwPhoton(grain, True)

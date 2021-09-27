@@ -17,7 +17,7 @@
 
 # -- Project information -----------------------------------------------------
 
-project = 'Space Cloud Light interaction'
+project = 'Photoelectric Heating On Interstallar Grains'
 copyright = '2021, Vincent Foriel'
 author = 'Vincent Foriel'
 
