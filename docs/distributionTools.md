@@ -20,9 +20,11 @@ number_of_test = 100000
 
 You can find and edit these parameters at the end of the file.
 
-## randomInDistrib
+## randomInDistrib()
 
 This function generate a random variable `x` according to a distribution of probability amplitude.
+
+### Usage
 
 ```
 x = randomInDistrib(distrib, min, max)
@@ -38,9 +40,19 @@ Return type:
 
 * `x`: `float`
 
-## plotDistrib
+### How it works
+
+To randomly draw a value `x` following the probability density function `f(x)` from a uniform random
+number generator:
+1. Randomly draw a value of `x` with a uniform generator.
+2. Randomly draw a number `u` between 0 and 1 with a uniform generator.
+3. If `u < f(x)`, keep x, otherwise, redo from step 1, until `u < f(x)`.
+
+## plotDistrib()
 
 This function help to plot a distribution by generating 2 lists `x` and `fx` that can by easliy plotted using th matplotlib function `plt.plot(x,fx)`
+
+### Usage
 
 ```
 x, fx = plotDistrib(distrib, min, max, step = 1)
@@ -57,3 +69,7 @@ Return types:
 
 * `x`: `list` of `float` (or `int` if `min` and `step` has the type `int`)
 * `fx`: `list` of `float`
+
+### How it works
+
+This function generate a list that contain every numbers included between `min` and `max` with the defined `step`. For each element `x`, it will compute the associated value `f(x)` and put the result in a second list.

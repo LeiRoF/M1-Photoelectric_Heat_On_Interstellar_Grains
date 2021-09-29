@@ -84,11 +84,10 @@ def throwOnePhoton(file, verbose = False):
     electron_emitted = rand() < 0.5*(1+np.tanh((E-E0)/2)) # Emit electron with probability Y=0.5*(1+Th[(E-E0)/2])
     if verbose:
         print("   - In these conditions, the probability of emitting an electron is ", round(0.5*(1+np.tanh((E-E0)/2)),3))
-        xaxis, fx = distributionTools.plotDistrib(lambda x: 0.5*(1+np.tanh(x-E0)/2), 3, 15, 0.1)
+        xaxis, fx = distributionTools.plotDistrib(lambda x: 0.5*(1+np.tanh((x-E0)/2)), 3, 15, 0.1)
         plt.subplot(132)
-        print("!!!!!!!!!!!!!!! E=",E,", Y(E)=",0.5*(1+np.tanh((E-E0)/2)))
         plt.plot(xaxis,fx,'r--',E,0.5*(1+np.tanh((E-E0)/2)),'bs')
-        plt.title("Electron emition")
+        plt.title("Electron emission")
         plt.xlabel("Energy of the photon (E)")
         plt.ylabel("Probability (Y)")
         plt.legend(["Y=0.5*(1+Th[(E-E0)/2])","Current situation"])
