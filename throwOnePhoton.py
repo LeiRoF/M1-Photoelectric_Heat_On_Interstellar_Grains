@@ -58,7 +58,7 @@ def throwOnePhoton(file, verbose = False):
         print("✅ - It hit the grain at Rx=", hit_pos+0.5, ", Ry+0.5", start_pos+0.5)
         print("   - In these conditions, the photon will travel ", round(da,3), "angstroms through the grain")
         xaxis, fx = distributionTools.plotDistrib(lambda x: np.exp(-x/la) / la, 0, 100, 1)
-        plt.subplot(231)
+        plt.subplot(131)
         plt.plot(xaxis,fx,'r--',da,np.exp(-da/la) / la,'bs')
         plt.title("Distance traveled by photon in the grain")
         plt.xlabel("Distance (da)")
@@ -85,7 +85,8 @@ def throwOnePhoton(file, verbose = False):
     if verbose:
         print("   - In these conditions, the probability of emitting an electron is ", round(0.5*(1+np.tanh((E-E0)/2)),3))
         xaxis, fx = distributionTools.plotDistrib(lambda x: 0.5*(1+np.tanh(x-E0)/2), 3, 15, 0.1)
-        plt.subplot(232)
+        plt.subplot(132)
+        print("!!!!!!!!!!!!!!! E=",E,", Y(E)=",0.5*(1+np.tanh((E-E0)/2)))
         plt.plot(xaxis,fx,'r--',E,0.5*(1+np.tanh((E-E0)/2)),'bs')
         plt.title("Electron emition")
         plt.xlabel("Energy of the photon (E)")
@@ -128,13 +129,12 @@ def throwOnePhoton(file, verbose = False):
         print("   - In these conditions, the electron will travel ", np.round(de,3), "angstroms through the grain")
 
         xaxis, fx = distributionTools.plotDistrib(lambda x: np.exp(-x/le) / le, 0, 100, 0.1)
-        plt.subplot(233)
+        plt.subplot(133)
         plt.plot(xaxis,fx,'r--',de,np.exp(-de/le) / le,'bs')
         plt.title("Distance traveled by electron in the grain")
         plt.xlabel("Distance (de)")
         plt.ylabel("Probability amplitude distribution (P)")
         plt.legend(["P=exp(-de/le)/le","Random de"])
-        plt.show()
 
     # Getting absorbtion position
     step = 0.001
@@ -165,9 +165,11 @@ def throwOnePhoton(file, verbose = False):
     with open("results/" + name + ".dat","a") as result:
             result.write(str(E - Ei) + '\n')
     return E - Ei
+    
 
     
 
 if __name__ == "__main__":
     throwOnePhoton("grains/Grain_N100_S1p0_B3p0.txt", verbose = True)
+    plt.show()
     

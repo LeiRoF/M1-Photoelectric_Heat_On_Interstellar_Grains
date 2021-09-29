@@ -34,3 +34,4 @@ This project was made with **Python 3.9** and can not run correctly in previous 
    :caption: Files description
 
    distributionTools.md
+   throwOnePhoton.md

@@ -1,6 +1,6 @@
 # distributionTools.py
 
-This fil contain 2 functions that helps to manage distributions.
+This file contains 2 functions that helps to manage distributions.
 
 If the file is executed directly by running the command `python distributionTools.py`, it will run a debug function that will plot the distribution and a result of several randomly generated variables in this distribution.
 
@@ -43,8 +43,15 @@ Return type:
 This function help to plot a distribution by generating 2 lists `x` and `fx` that can by easliy plotted using th matplotlib function `plt.plot(x,fx)`
 
 ```
-x, fx = plotDistrib(distrib, min, max, step = 1, name = None)
+x, fx = plotDistrib(distrib, min, max, step = 1)
 ```
+
+Parameters:
+
+* `distrib` is a function that take one parameter (must be a number)
+* `min` is the minimum value that will be plotted on the x-axes
+* `max` is the maximum value that will be plotted on the x-axes
+* `step` is the precision of the plot
 
 Return types:
 

@@ -13,7 +13,7 @@ def randomInDistrib(distrib, min=0, max=1):
     return x
 
 # Return 2 lists, x and fx that can be easily plotted
-def plotDistrib(distrib, min, max, step = 1, name = None):
+def plotDistrib(distrib, min, max, step = 1):
 
     x = np.arange(min,max,step)
     fx = []
@@ -45,16 +45,8 @@ if __name__ == "__main__":
     f2x = []
     for i in dict.values(): f2x.append(i)
 
-    plt.subplot(121)
-    plt.plot(x,fx,'r--')
-    plt.title('Distribution')
-    plt.xlabel("x")
-    plt.ylabel("f(x)")
-    plt.subplot(122)
-    plt.bar(x, f2x)
-    plt.title('Test of "randomInDistrib" function')
-    plt.xlabel("x")
-    plt.ylabel("n(x)")
+    plt.subplot(121);   plt.plot(x,fx,'r--');   plt.title('Distribution');                          plt.xlabel("x");    plt.ylabel("f(x)")
+    plt.subplot(122);   plt.bar(x, f2x);        plt.title('Test of "randomInDistrib" function');    plt.xlabel("x");    plt.ylabel("n(x)")
     plt.show()
 
     
