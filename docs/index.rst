@@ -31,7 +31,7 @@ This project was made with **Python 3.9** and can not run correctly in previous 
 
 .. toctree::
    :maxdepth: 2
-   :caption: Files description
+   :caption: Files documentation
 
    distributionTools.md
    throwOnePhoton.md

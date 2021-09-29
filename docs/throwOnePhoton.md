@@ -8,7 +8,9 @@ When this file is executed directly with the command `python throwOnePhton.py`, 
 
 > If the phoon passes by the grain, if it passes through or if its absorption does not cause any electron emission, some of these graphs will not be displayed. You will have to restart the simulation several times for all the events to take place.
 
-## throwOnePhoton()
+## throwOnePhoton
+
+This function simulate a photon that hit (or not) the grain and put results at the end of a file (with the same name as the file passed to it as a parameter)
 
 ### Usage
 

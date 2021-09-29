@@ -22,4 +22,4 @@ def throwManyPhotons(count, file, verbose = False):
     plt.show()
 
 if __name__ == "__main__":
-    throwManyPhotons(100000, "grains/Grain_N100_S1p0_B3p0.txt", verbose = True)
+    throwManyPhotons(10000, "grains/Grain_N100_S1p0_B3p0.txt", verbose = True)
