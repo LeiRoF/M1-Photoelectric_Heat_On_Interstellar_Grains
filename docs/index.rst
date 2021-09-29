@@ -31,6 +31,6 @@ This project was made with **Python 3.9** and can not run correctly in previous 
 
 .. toctree::
    :maxdepth: 2
-   :caption: Sommaire
+   :caption: Files description
 
-   files_description.md
+   distributionTools.md
