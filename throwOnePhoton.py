@@ -1,16 +1,17 @@
 import numpy as np
 from numpy.random.mtrand import rand, randint
 import matplotlib.pyplot as plt
-import utils
+import grain as G
 import os
 import distributionTools
 
 def throwOnePhoton(file, verbose = False):
     name = os.path.splitext(file)[0].split("/")[-1]
-    grain = utils.getGrainFromFile(file)
+    grain = G.getFromFile(file)
     start_pos = randint(len(grain))
     E = 3+rand()*12 # Photon energy 3 < E < 15 eV
-    Ei = 11.26 # Ionisation energy for graphite sphere (carbon)
+    #Ei = 11.26 # Ionisation energy for graphite sphere (carbon)
+    Ei = G.getIonisationEnergy(grain)
     grain1D = grain[start_pos] # We consider only the dimension corresponding to the direction of the photon
 
     if not os.path.isdir("results"):
@@ -163,7 +164,7 @@ def throwOnePhoton(file, verbose = False):
     if verbose: print("✅ - The electron was ejected with a kinetic energy of ", E - Ei, "eV")
     with open("results/" + name + ".dat","a") as result:
             result.write(str(E - Ei) + '\n')
-    return E - Ei
+    return  E - Ei
     
 
     
