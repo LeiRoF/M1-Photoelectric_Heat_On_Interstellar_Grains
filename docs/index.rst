@@ -35,3 +35,4 @@ This project was made with **Python 3.9** and can not run correctly in previous 
 
    distributionTools.md
    throwOnePhoton.md
+   throwManyPhotons.md
