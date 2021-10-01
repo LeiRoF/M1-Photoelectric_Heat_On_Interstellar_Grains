@@ -10,7 +10,7 @@ You should get something like that:
 
 This plot is for the folowing parameters:
 
-```
+```python
 min = 0
 max = 100
 precision = 1
@@ -26,7 +26,7 @@ This function generate a random variable `x` according to a distribution of prob
 
 ### Usage
 
-```
+```python
 x = randomInDistrib(distrib, min, max)
 ```
 
@@ -54,7 +54,7 @@ This function help to plot a distribution by generating 2 lists `x` and `fx` tha
 
 ### Usage
 
-```
+```python
 x, fx = plotDistrib(distrib, min, max, step = 1)
 ```
 

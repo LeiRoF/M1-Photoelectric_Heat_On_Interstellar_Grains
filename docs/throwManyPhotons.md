@@ -4,7 +4,7 @@ This file contains only one function that simulates many photons hitting the gra
 
 When this file is executed directly with the command `python throwManyPhotons.py`, the function is executed with the option `verbose=True`. The result of each photon throwed on the grain is then displayed in the console. At the end of the simulation, an histogram will appear to show the energy distribution of emitted electrons. Moreover, another figure will shox you the proportion of all events that occured for each photons.
 
-![](https://vincent.foriel.xyz/wp-content/uploads/2021/10/Capture-decran-2021-10-01-114019.png)
+![](https://vincent.foriel.xyz/wp-content/uploads/2021/10/Capture-decran-2021-10-01-114019-1.png)
 
 ## throwOnePhoton
 
@@ -12,7 +12,7 @@ This function simulate many photons that hit (or not) the grain and put results 
 
 ### Usage
 
-```
+```python
 throwManyPhoton(count, file, verbose = False)
 ```
 

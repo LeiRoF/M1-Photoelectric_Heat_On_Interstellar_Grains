@@ -14,7 +14,7 @@ This function simulate a photon that hit (or not) the grain and put results at t
 
 ### Usage
 
-```
+```python
 energy = throwOnePhoton(file, verbose = False)
 ```
 
