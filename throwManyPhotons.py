@@ -4,25 +4,60 @@ from throwOnePhoton import throwOnePhoton
 from sys import argv
 import sys
 import time
+from multiprocessing import Pool
+import os
+
+def plotData():
+    y = []
+    events = [0,0,0,0]
+    start = time.time()
+    
+    with open("results/Grain_N100_S0p5_B0p5.dat","r") as res:
+        for energy in res:
+            energy = energy.strip()
+            if energy == '':
+                continue
+            if energy not in ["None", "-1", "-2", "-3"]:
+                try:
+                    if float(energy) < 12:
+                        y.append(float(energy))
+                        events[3] += 1
+                except ValueError:
+                    pass
+            elif energy != "None": events[-int(energy)-1] += 1
+    end = time.time()
+    print("Elapsed time to open the file: ", end - start)
+
+    plt.subplot(121)
+    plt.hist(y,bins=50)
+    plt.title("Energy of emitted photons"); plt.xlabel("Energie (eV)"); plt.ylabel("Nb electrons emitted")
+    
+    plt.subplot(122)
+    plt.bar(0,events[0],label="photon passed through the grain"); plt.bar(1,events[1],label="photon was absorbed but no electon was emitted"); plt.bar(2,events[2],label="an electron was emitted but was re-absorbed in the grain"); plt.bar(3,events[3],label="the electron escaped from the grain")
+    plt.title("Event proportion"); plt.xlabel("Event type"); plt.ylabel("Number of events"); plt.legend()
 
 def throwManyPhotons(file, count, verbose = False):
 
     y = []
     events = np.zeros(4)
 
-    for i in range(count):
-        energy = throwOnePhoton(file)
-        if energy not in [None, -1, -2, -3]:
-            y.append(energy)
-            if verbose: print("[", i, "] ", round(energy,3), " eV")
-            events[3] += 1
-        elif energy is not None: events[-energy-1] += 1
-
+    if verbose:
+        for i in range(count):
+            energy = throwOnePhoton(file)
+            if energy not in [None, -1, -2, -3]:
+                y.append(energy)
+                if verbose: print("[", i, "] ", round(energy,3), " eV")
+                events[3] += 1
+            elif energy is not None: events[-energy-1] += 1
+    else:
+        list = [file]*count
+        print("Executing simulation on ", max(os.cpu_count()-1,1), " threads")
+        with Pool(max(os.cpu_count()-1,1)) as p:
+            p.map(throwOnePhoton,list)
 
     if verbose:
-
         plt.subplot(121)
-        plt.hist(y,bins=50);
+        plt.hist(y,bins=50)
         plt.title("Energy of emitted photons"); plt.xlabel("Energie (eV)"); plt.ylabel("Nb electrons emitted")
         
         plt.subplot(122)
@@ -50,15 +85,19 @@ if __name__ == "__main__":
         count = 1000
 
     try:
-        verbose = bool(argv[3])
+        verbose = argv[3].lower() in ["true","1"]
     except ValueError:
         print('\n[ERROR] "verbose" parameter must be set to "True" or "False". Correct syntax: python throwManyPhotons.py [filename (string)] [count (int)] [verbose (bool)]\nMore information on https://photoelectric-heating-on-interstallar-grains.readthedocs.io/en/latest/throwManyPhotons.html\n')
         sys.exit(1)
     except IndexError:
-        verbose = False
+        verbose = True
 
     start = time.time()
-    #asyncio.run(throwManyPhotons(file, count, verbose))
     throwManyPhotons(file, count, verbose)
+    
     end = time.time()
     print("Elapsed time: ", end - start)
+    if not verbose:
+        plotData()
+    
+    plt.show()
