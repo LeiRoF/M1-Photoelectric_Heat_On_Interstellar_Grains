@@ -2,11 +2,11 @@
 
 This file contains a function that simulates a photon hitting the grain passed in parameter.
 
-When this file is executed directly with the command `python throwOnePhton.py`, the function is executed with the option `verbose=True`. The sequence of events is then displayed in the console. At the end of the simulation, the different parameters that occurred during the simulation are displayed in a plot like this one
+When this file is executed directly with the command `python throwOnePhoton.py`, the function is executed with the option `verbose=True`. The sequence of events is then displayed in the console. At the end of the simulation, the different parameters that occurred during the simulation are displayed in a plot like this one
 
 ![](https://vincent.foriel.xyz/wp-content/uploads/2021/09/Capture-decran-2021-09-29-150141-1.png)
 
-> If the phoon passes by the grain, if it passes through or if its absorption does not cause any electron emission, some of these graphs will not be displayed. You will have to restart the simulation several times for all the events to take place.
+> If the photon passes by the grain, if it passes through or if its absorption does not cause any electron emission, some of these graphs will not be displayed. You will have to restart the simulation several times for all the events to take place.
 
 ## throwOnePhoton
 
@@ -20,8 +20,8 @@ energy = throwOnePhoton(file, verbose = False)
 
 Parameters:
 
-* `file`: path to the file containing the grain shape.
-* `verbose`: allows to display all parameters and events occurring during the simulation
+* `file`: `string`: path to the file containing the grain shape.
+* `verbose`: `boolean`: allows to display all parameters and events occurring during the simulation
 
 Return type:
 

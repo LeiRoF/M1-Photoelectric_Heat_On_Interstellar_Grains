@@ -32,9 +32,9 @@ x = randomInDistrib(distrib, min, max)
 
 Parameters:
 
-* `distrib` is a function that take one parameter (must be a number)
-* `min` is the minimum value that this function can generate
-* `max` is the maximum value that this function can generate
+* `distrib`: `function`: a function that take one parameter (must be a number)
+* `min`: `float`: the minimum value that this function can generate
+* `max`: `float`: the maximum value that this function can generate
 
 Return type:
 
@@ -60,10 +60,10 @@ x, fx = plotDistrib(distrib, min, max, step = 1)
 
 Parameters:
 
-* `distrib` is a function that take one parameter (must be a number)
-* `min` is the minimum value that will be plotted on the x-axes
-* `max` is the maximum value that will be plotted on the x-axes
-* `step` is the precision of the plot
+* `distrib`: `function`: a function that take one parameter (must be a number)
+* `min`: `float`: the minimum value that will be plotted on the x-axes
+* `max`: `float`: the maximum value that will be plotted on the x-axes
+* `step`: `float`: the precision of the plot
 
 Return types:
 
