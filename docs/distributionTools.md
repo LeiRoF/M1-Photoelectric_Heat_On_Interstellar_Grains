@@ -20,6 +20,16 @@ number_of_test = 100000
 
 You can find and edit these parameters at the end of the file.
 
+**Execute the file via the console**
+
+You can run the file by going to the directory where the source code is located, then running the following command:
+
+```
+python distributionTools.py
+```
+
+> This file is not supposed to be executed except for debugging. If you want to edit parameters, you must edit the source code.
+
 ## randomInDistrib
 
 This function generate a random variable `x` according to a distribution of probability amplitude.

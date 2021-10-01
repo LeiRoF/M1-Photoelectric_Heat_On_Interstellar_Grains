@@ -2,11 +2,22 @@
 
 This file contains a function that simulates a photon hitting the grain passed in parameter.
 
-When this file is executed directly with the command `python throwOnePhoton.py`, the function is executed with the option `verbose=True`. The sequence of events is then displayed in the console. At the end of the simulation, the different parameters that occurred during the simulation are displayed in a plot like this one
+When this file is executed directly with the command `python throwOnePhoton.py`, the function is executed with the option `verbose=True`. The sequence of events is then displayed in the console. At the end of the simulation, the different parameters that occurred during the simulation are displayed in a plot like this one:
 
 ![](https://vincent.foriel.xyz/wp-content/uploads/2021/09/Capture-decran-2021-09-29-150141-1.png)
 
 > If the photon passes by the grain, if it passes through or if its absorption does not cause any electron emission, some of these graphs will not be displayed. You will have to restart the simulation several times for all the events to take place.
+
+**Execute the file via the console**
+
+You can run the file by going to the directory where the source code is located, then running the following command:
+
+```
+python throwManyPhotons.py [filename (string)] [count (int)]
+```
+
+* `filename`: is the path to the file. It can be a relative path to the executed file or an absolute one. WARNING: if the path contains spaces, put it in single quotes `'` or double quotes `"`.
+* `count`: number of photons to send during the simulation. Be careful, a large number of photons can lead to a very long calculation time. To test the program, it is recommended not to send more than 1000 photons.
 
 ## throwOnePhoton
 
@@ -29,6 +40,7 @@ Return type:
   * -1 if the photon passes through the grain
   * -2 if the photon is absorbed but no electron is emitted
   * -3 if an electron is emitted but is re-absorbed by the grain
+The retunr can also be `None` if the photon miss the grain.
 
 ### How it works
 

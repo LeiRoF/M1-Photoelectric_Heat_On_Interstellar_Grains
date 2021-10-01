@@ -30,6 +30,10 @@ This project was made with **Python 3.9** and can not run correctly in previous 
 
 3) Install project dependencies
 
+.. code-block::
+
+   pip install -r requirements.txt
+
 Credits
 -------
 
@@ -42,10 +46,6 @@ Helpers:
 
 - Enzo
 - Yara
-
-.. code-block::
-
-   pip install -r requirements.txt
 
 .. toctree::
    :maxdepth: 2

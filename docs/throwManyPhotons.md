@@ -6,6 +6,17 @@ When this file is executed directly with the command `python throwManyPhotons.py
 
 ![](https://vincent.foriel.xyz/wp-content/uploads/2021/10/Capture-decran-2021-10-01-114019-1.png)
 
+**Execute the file via the console**
+
+You can run the file by going to the directory where the source code is located, then running the following command:
+
+```
+python throwManyPhotons.py [filename (string)] [count (int)]
+```
+
+* `filename`: is the path to the file. It can be a relative path to the executed file or an absolute one. WARNING: if the path contains spaces, put it in single quotes `'` or double quotes `"`.
+* `count`: number of photons to send during the simulation. Be careful, a large number of photons can lead to a very long calculation time. To test the program, it is recommended not to send more than 1000 photons.
+
 ## throwOnePhoton
 
 This function simulate many photons that hit (or not) the grain and put results at the end of a file (with the same name as the file passed to it as a parameter)

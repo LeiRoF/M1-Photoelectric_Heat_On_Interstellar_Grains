@@ -1,3 +1,5 @@
+from sys import argv
+import sys
 import numpy as np
 from numpy.random.mtrand import rand, randint
 import matplotlib.pyplot as plt
@@ -6,11 +8,10 @@ import os
 import distributionTools
 
 def throwOnePhoton(file, verbose = False):
-    name = os.path.splitext(file)[0].split("/")[-1]
+    name = os.path.splitext(file)[0].split("/")[-1].split("\\")[-1] # Getting file name
     grain = G.getFromFile(file)
     start_pos = randint(len(grain))
     E = 3+rand()*12 # Photon energy 3 < E < 15 eV
-    #Ei = 11.26 # Ionisation energy for graphite sphere (carbon)
     Ei = G.getIonisationEnergy(grain)
     grain1D = grain[start_pos] # We consider only the dimension corresponding to the direction of the photon
 
@@ -18,9 +19,9 @@ def throwOnePhoton(file, verbose = False):
         os.makedirs("results")
 
     if verbose:
-        print("   - A photon appeared at Rx=0.0, Ry=", start_pos+0.5)
-        print("   - The photon's direction is: Dx=1.0 , Dy=0.0")
-        print("   - It has an energy of ", round(E,3), " eV")
+        print("  - A photon appeared at Rx=0.0, Ry=", start_pos+0.5)
+        print("  - The photon's direction is: Dx=1.0 , Dy=0.0")
+        print("  - It has an energy of ", round(E,3), " eV")
     
     # Getting point of impact between photon and drain
     cpt = 0
@@ -48,7 +49,7 @@ def throwOnePhoton(file, verbose = False):
     """
 
     if not(0 <= hit_pos < len(grain)):
-        if verbose: print("❌ - But... it missed the grain")
+        if verbose: print("X - But... it missed the grain")
         return None
 
     """
@@ -56,8 +57,8 @@ def throwOnePhoton(file, verbose = False):
     """
 
     if verbose:
-        print("✅ - It hit the grain at Rx=", hit_pos+0.5, ", Ry+0.5", start_pos+0.5)
-        print("   - In these conditions, the photon will travel ", round(da,3), "angstroms through the grain")
+        print("0 - It hit the grain at Rx=", hit_pos+0.5, ", Ry+0.5", start_pos+0.5)
+        print("  - In these conditions, the photon will travel ", round(da,3), "angstroms through the grain")
         xaxis, fx = distributionTools.plotDistrib(lambda x: np.exp(-x/la) / la, 0, 100, 1)
         plt.subplot(131)
         plt.plot(xaxis,fx,'r--',da,np.exp(-da/la) / la,'bs')
@@ -71,7 +72,7 @@ def throwOnePhoton(file, verbose = False):
     """
 
     if not (0 <= x < len(grain)): 
-        if verbose: print("❌ - And... this distance was too high, it passed trhough the grain :/")
+        if verbose: print("X - And... this distance was too high, it passed trhough the grain :/")
         with open("results/" + name + ".dat","a") as result:
             result.write(str(-1) + '\n')
         return -1
@@ -80,11 +81,11 @@ def throwOnePhoton(file, verbose = False):
     If the photon is absorbed
     """
 
-    if verbose: print("✅ - Oh, it was absorbed at Rx=", x+0.5, " Ry=", start_pos+0.5)
+    if verbose: print("0 - Oh, it was absorbed at Rx=", x+0.5, " Ry=", start_pos+0.5)
     E0 = 8
     electron_emitted = rand() < 0.5*(1+np.tanh((E-E0)/2)) # Emit electron with probability Y=0.5*(1+Th[(E-E0)/2])
     if verbose:
-        print("   - In these conditions, the probability of emitting an electron is ", round(0.5*(1+np.tanh((E-E0)/2)),3))
+        print("  - In these conditions, the probability of emitting an electron is ", round(0.5*(1+np.tanh((E-E0)/2)),3))
         xaxis, fx = distributionTools.plotDistrib(lambda x: 0.5*(1+np.tanh((x-E0)/2)), 3, 15, 0.1)
         plt.subplot(132)
         plt.plot(xaxis,fx,'r--',E,0.5*(1+np.tanh((E-E0)/2)),'bs')
@@ -98,7 +99,7 @@ def throwOnePhoton(file, verbose = False):
     """
 
     if not electron_emitted:
-        if verbose: print("❌ - No electron was emitted :/")
+        if verbose: print("X - No electron was emitted :/")
         with open("results/" + name + ".dat","a") as result:
             result.write(str(-2) + '\n')
         return -2
@@ -119,14 +120,14 @@ def throwOnePhoton(file, verbose = False):
     Dy = Dy*normalisationFactor 
 
     if verbose:
-        print("✅ - An electron has been emitted at Rx=", Rx+0.5, " , Ry=", Ry+0.5)
-        print("   - The electron's direction is: Dx=", np.round(Dx,3), " , Dy=", np.round(Dy,3))
+        print("0 - An electron has been emitted at Rx=", Rx+0.5, " , Ry=", Ry+0.5)
+        print("  - The electron's direction is: Dx=", np.round(Dx,3), " , Dy=", np.round(Dy,3))
 
     # Getting random distance traveld by the electron using the probability P=exp(-de/le) / le
     le = 10 # 10^-6 cm = 100 angstrom -> 100 pixels
     de = distributionTools.randomInDistrib(lambda x: np.exp(-x/le) / le,0,100)
     if verbose:
-        print("   - In these conditions, the electron will travel ", np.round(de,3), "angstroms through the grain")
+        print("  - In these conditions, the electron will travel ", np.round(de,3), "angstroms through the grain")
 
         xaxis, fx = distributionTools.plotDistrib(lambda x: np.exp(-x/le) / le, 0, 100, 0.1)
         plt.subplot(133)
@@ -150,7 +151,7 @@ def throwOnePhoton(file, verbose = False):
     """
 
     if 0 <= Rx < len(grain) and 0 <= Ry < len(grain):
-        if verbose: print("❌ - The electron was re-absorbed at position: Rx=", np.round(Rx,3), ", Ry=", np.round(Ry,3))
+        if verbose: print("X - The electron was re-absorbed at position: Rx=", np.round(Rx,3), ", Ry=", np.round(Ry,3))
         with open("results/" + name + ".dat","a") as result:
             result.write(str(-3) + '\n')
         return -3
@@ -161,7 +162,7 @@ def throwOnePhoton(file, verbose = False):
 
     x = -1
     electronAbsorbed = False
-    if verbose: print("✅ - The electron was ejected with a kinetic energy of ", E - Ei, "eV")
+    if verbose: print("0 - The electron was ejected with a kinetic energy of ", E - Ei, "eV")
     with open("results/" + name + ".dat","a") as result:
             result.write(str(E - Ei) + '\n')
     return  E - Ei
@@ -170,6 +171,17 @@ def throwOnePhoton(file, verbose = False):
     
 
 if __name__ == "__main__":
-    throwOnePhoton("grains/Grain_N100_S1p0_B3p0.txt", verbose = True)
+
+    try:
+        file = argv[1]
+        if file[0] == file[-1] in ["'",'"']: file = file[1:-2]
+        with open(file): pass
+    except IndexError:
+        file = "grains/Grain_N100_S1p0_B3p0.txt"
+    except FileNotFoundError:
+        print('\n[ERROR] File "', argv[1] ,'" not found. Correct syntax: python throwManyPhotons.py [filename (string)] [count (int)]\nMore information on https://photoelectric-heating-on-interstallar-grains.readthedocs.io/en/latest/throwOnePhoton.html\n')
+        sys.exit(1)
+
+    throwOnePhoton(file, verbose = True)
     plt.show()
     
