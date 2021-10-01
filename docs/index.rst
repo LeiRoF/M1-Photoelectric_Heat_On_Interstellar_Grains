@@ -6,6 +6,11 @@
 Welcome to the Photoelectric Heating On Interstallar Grains documentation!
 ==========================================================================
 
+Purpose
+-------
+
+The main objective of this program is to study the photoelectric effect on dust grain in space, and how this effect impact the heating of a gaz cloud.
+
 Installation
 ------------
 
@@ -24,6 +29,19 @@ This project was made with **Python 3.9** and can not run correctly in previous 
    cd Photoelectric_Heating_On_Interstallar_Grains
 
 3) Install project dependencies
+
+Credits
+-------
+
+Developers: 
+
+- Vincent FORIEL
+- Julien MONTILLAUD
+
+Helpers:
+
+- Enzo
+- Yara
 
 .. code-block::
 
