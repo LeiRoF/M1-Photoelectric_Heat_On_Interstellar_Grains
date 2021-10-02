@@ -7,12 +7,14 @@ import time
 from multiprocessing import Pool
 import os
 
-def plotData():
+def plotData(file):
     y = []
     events = [0,0,0,0]
     start = time.time()
     
-    with open("results/Grain_N100_S0p5_B0p5.dat","r") as res:
+    with open(file,"r") as res:
+        print(res.name)
+        print(sum(1 for line in res))
         for energy in res:
             energy = energy.strip()
             if energy == '':
@@ -26,7 +28,7 @@ def plotData():
                     pass
             elif energy != "None": events[-int(energy)-1] += 1
     end = time.time()
-    print("Elapsed time to open the file: ", end - start)
+    print("Elapsed time to read data: ", end - start)
 
     plt.subplot(121)
     plt.hist(y,bins=50)
@@ -51,8 +53,9 @@ def throwManyPhotons(file, count, verbose = False):
             elif energy is not None: events[-energy-1] += 1
     else:
         list = [file]*count
-        print("Executing simulation on ", max(os.cpu_count()-1,1), " threads")
-        with Pool(max(os.cpu_count()-1,1)) as p:
+        cores = max(os.cpu_count()-1,1)
+        print("Executing simulation on ", cores , " threads")
+        with Pool(cores) as p:
             p.map(throwOnePhoton,list)
 
     if verbose:
@@ -96,8 +99,8 @@ if __name__ == "__main__":
     throwManyPhotons(file, count, verbose)
     
     end = time.time()
-    print("Elapsed time: ", end - start)
+    print("Simulation time: ", end - start)
     if not verbose:
-        plotData()
+        plotData("results/" + os.path.splitext(file)[0].split("/")[-1].split("\\")[-1] + ".dat") # Getting file name
     
     plt.show()
