@@ -1,6 +1,7 @@
 
 import matplotlib.pyplot as plt
 import time
+import numpy as np
 
 def plotEnergy(file):
     y = []
@@ -22,7 +23,7 @@ def plotEnergy(file):
             elif energy != "None": events[-int(energy)-1] += 1
     end = time.time()
     print("Elapsed time to read data: ", end - start)
-    
+
     plt.subplot(121)
     plt.hist(y,bins=50)
     plt.title("Energy of emitted photons"); plt.xlabel("Energie (eV)"); plt.ylabel("Nb electrons emitted")

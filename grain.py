@@ -1,10 +1,100 @@
+from PIL.Image import new
 import numpy as np
 import matplotlib.pyplot as plt
 import numpy as np
 import pylab as pl
 import os
 from GRF_routines import addGRF
+from multiprocessing import Pool
 
+
+def askParameters(N, sigma_dens, beta):
+    # size of the grain image (default = 100)
+    if not N:
+        lock = True
+        while lock:
+            N = input("Size of the grain (int>0, default:100): ")
+            try:
+                N = int(N)
+                lock = False
+            except ValueError:
+                print("Invalid value")
+
+    # Width of the density distribution (default = 1.0)
+    if not sigma_dens:
+        lock = True
+        while lock:
+            sigma_dens = input("Width of the density distribution (float>0, default:1.0): ")
+            try:
+                sigma_dens = float(sigma_dens)
+                lock = False
+            except ValueError:
+                print("Invalid value")
+
+    # Slope of the power spectrum (=probability density function=PDF) for k>Kmin (default = 3.0)
+    if not beta:
+        lock = True
+        while lock:
+            beta = input("Slope of the power spectrum (float>0, default:3.0): ")
+            try:
+                beta = float(beta)
+                lock = False
+            except ValueError:
+                print("Invalid value")
+
+    return N, sigma_dens, beta
+
+def generate3D(N = None, sigma_dens = None, beta = None, path = "./grains/", doplot = 0, writeFile = True, verbose = False):
+    N, sigma_dens, beta = askParameters(N, sigma_dens, beta)
+    if N % 2 == 1: N = N+1
+
+    poolParameter = []
+    for i in range(0,N+1):
+        size = int(round(N*np.sin(np.arccos(2*(i)/N - 1)),0))
+        print(i,size)
+        if size > 0:
+            if size % 2 == 1: size = size+1
+            poolParameter.append((size, sigma_dens, beta, path, 0, False, False, i))
+
+    cores = max(os.cpu_count()-1,1)
+    print("Generating grain on ", cores , " threads")
+    with Pool(cores) as p:
+        grain = p.starmap(generate,poolParameter)
+
+    grain.sort(key = lambda x: x[0])
+    grain = [np.ndarray.tolist(x[1]) for x in grain]
+
+
+    for i in range(len(grain)):
+        diff = int((N - len(grain[i]))/2)
+        for j in range(len(grain[i])):
+            grain[i][j] = [0]*diff + [int(k) for k in grain[i][j]] + [0]*diff
+        grain[i] = [[0]*N]*diff + grain[i] + [[0]*N]*diff
+    
+    diff = N - len(grain)
+
+    for i in range(diff):
+        grain = [[[0]*N]*N] + grain
+        if diff%2==0: grain = grain + [[[0]*N]*N]
+    
+    grain = np.array(grain)
+
+    for section in grain:
+        for row in section:
+            print(row)
+        print("")
+
+    if writeFile:
+        if not os.path.isdir(path):
+            os.makedirs(path)
+
+        with open(path + "3D-Grain_N{}_S{}p{}_B{}p{}.txt".format(int(N),int(sigma_dens),int(sigma_dens*10),int(beta),int(beta*10)),"w+") as file:
+            for section in grain:
+                for row in section:
+                    file.write(" ".join([str(x) for x in row]) + "\n")
+                    
+    return
+    
 
 # Identify the pixels attached to the main region
 def group(grain, x0,y0, N, doplot = 0):
@@ -46,52 +136,22 @@ def group(grain, x0,y0, N, doplot = 0):
     pl.ioff()
     return progress
 
-def generate(N = None, sigma_dens = None, beta = None, path = "./grains/", doplot = 0, verbose = False):
+def generate(N = None, sigma_dens = None, beta = None, path = "./grains/", doplot = 0, writeFile = True, verbose = False, id3D = 0):
     """
     N.B.: the grains are generated randomly => a single grain is not necessarily 
         representative of the fractal parameters. Only a statistically significant
         sample can provide a reliable view of the underlying properties. 
     """
+    N, sigma_dens, beta = askParameters(N, sigma_dens, beta)
+    if N % 2 == 1: N = N+1
 
     # Tunable parameters
     Kmin = 3             # Minimum wavenumber for PDF slope = beta
     beta_in = 4          # Slope of PDF between k=0 and Kmin
     Npad = 0           # Padding around the map to get rid of the peak near k=0
     Adens = 1.           # Mean density - should not impact dust grain
-    doplot = 1           # Visual check of grain calculation: 0= desactivated, 1= only final plot, 2= animation of search for the main group + final plot
+    # doplot -> Visual check of grain calculation: 0= desactivated, 1= only final plot, 2= animation of search for the main group + final plot
 
-    # size of the grain image (default = 100)
-    if not N:
-        lock = True
-        while lock:
-            N = input("Size of the grain (int>0, default:100): ")
-            try:
-                N = int(N)
-                lock = False
-            except ValueError:
-                print("Invalid value")
-
-    # Width of the density distribution (default = 1.0)
-    if not sigma_dens:
-        lock = True
-        while lock:
-            sigma_dens = input("Width of the density distribution (float>0, default:1.0): ")
-            try:
-                sigma_dens = float(sigma_dens)
-                lock = False
-            except ValueError:
-                print("Invalid value")
-
-    # Slope of the power spectrum (=probability density function=PDF) for k>Kmin (default = 3.0)
-    if not beta:
-        lock = True
-        while lock:
-            beta = input("Slope of the power spectrum (float>0, default:3.0): ")
-            try:
-                beta = float(beta)
-                lock = False
-            except ValueError:
-                print("Invalid value")
 
     # while loop to make sure the peak is sufficiently close to the center of the cube
     tol = 0.4            # Tolerance for location of the density maximum - between 0 (very tolerant) and 0.49999 (very tough)
@@ -141,14 +201,14 @@ def generate(N = None, sigma_dens = None, beta = None, path = "./grains/", doplo
     grain2 = group(grain, mmax[0][0], mmax[1][0], N, doplot)
 
     # Write down the grain image in ASCII format (very inefficient format, but easy to control)
-    if not os.path.isdir(path):
-        os.makedirs(path)
-    np.savetxt(path + "Grain_N%i_S%ip%i_B%ip%i.txt" % (N, int(sigma_dens), \
-                                                int((sigma_dens-int(sigma_dens))*10), \
-                                                int(beta), \
-                                                int((beta-int(beta))*10)), \
-                                                grain2, fmt='%i')
-
+    if writeFile:
+        if not os.path.isdir(path):
+            os.makedirs(path)
+        np.savetxt(path + "Grain_N%i_S%ip%i_B%ip%i.txt" % (N, int(sigma_dens), \
+                                                    int((sigma_dens-int(sigma_dens))*10), \
+                                                    int(beta), \
+                                                    int((beta-int(beta))*10)), \
+                                                    grain2, fmt='%i')
 
     if (doplot>=1):
         pl.figure(figsize=(20,10))
@@ -169,6 +229,8 @@ def generate(N = None, sigma_dens = None, beta = None, path = "./grains/", doplo
         pl.colorbar(shrink=0.4)
 
         if not __name__ == "__main__": pl.show()   
+    
+    return [id3D, grain2]
 
 
 
@@ -237,7 +299,9 @@ def getIonisationEnergy(grain = None, Nc = None):
 
 if __name__ == "__main__":
 
-    generate(100,1.0,3.0,doplot=1)
+    generate3D(writeFile=True)
+    """
+    generate(None, None, None,doplot=1)
 
     grain = getFromFile("grains/Grain_N100_S1p0_B3p0.txt")
     size = getCorrectedSize(grain)
@@ -258,4 +322,5 @@ if __name__ == "__main__":
     print("Number of carbons = {:.3e}".format(Nc))
     print("Ionisation energy = ", Ei, " eV")
 
-    pl.show() 
+    pl.show()
+    """
