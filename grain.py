@@ -299,8 +299,8 @@ def getIonisationEnergy(grain = None, Nc = None):
 
 if __name__ == "__main__":
 
-    generate3D(writeFile=True)
-    """
+    #generate3D(writeFile=True)
+    #"""
     generate(None, None, None,doplot=1)
 
     grain = getFromFile("grains/Grain_N100_S1p0_B3p0.txt")
@@ -323,4 +323,4 @@ if __name__ == "__main__":
     print("Ionisation energy = ", Ei, " eV")
 
     pl.show()
-    """
+    #"""

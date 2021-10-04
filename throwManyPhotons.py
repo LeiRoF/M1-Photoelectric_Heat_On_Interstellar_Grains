@@ -1,17 +1,16 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from throwOnePhoton import throwOnePhoton
+import throwOnePhoton
 from sys import argv
 import sys
 import time
 from multiprocessing import Pool
 import os
-import data
-
 from numpy import pi # do not remove even if seems to be unused
 from numpy.random.mtrand import rand # do not remove even if seems to be unused
 
-def throwManyPhotons(file, count, angle = 0, target = ["rand()","rand()"], verbose = False):
+
+def run(grain, count, angle = 0, target = ["rand()","rand()"], verbose = False, name = "grain"):
 
     y = []
     events = np.zeros(4)
@@ -19,20 +18,21 @@ def throwManyPhotons(file, count, angle = 0, target = ["rand()","rand()"], verbo
     # Verbose -> simulation sequential on 1 thread
     if verbose:
         for i in range(count):
-            energy = throwOnePhoton(file,angle,target)
+            if count == 1: energy = throwOnePhoton.run(grain,angle,target,True,name)
+            else: energy = throwOnePhoton.run(grain,angle,target,False,name)
             if energy not in [None, -1, -2, -3]:
                 y.append(energy)
-                if verbose: print("[", i, "] ", round(energy,3), " eV")
+                if verbose and count > 1: print("[", i, "] ", round(energy,3), " eV")
                 events[3] += 1
             elif energy is not None: events[-energy-1] += 1
 
     # Not Vetbose -> Simulation parrallelized
     else:
-        list = [(file,angle,target)]*count
+        list = [(grain,angle,target,False,name)]*count
         cores = max(os.cpu_count()-1,1)
         print("Executing simulation on ", cores , " threads")
         with Pool(cores) as p:
-            p.starmap(throwOnePhoton,list)
+            p.starmap(throwOnePhoton.run,list)
 
     if verbose:
         plt.subplot(121)
@@ -46,73 +46,8 @@ def throwManyPhotons(file, count, angle = 0, target = ["rand()","rand()"], verbo
         plt.show()
 
 if __name__ == "__main__":
-
-    try:
-        file = argv[1]
-        if file[0] == file[-1] in ["'",'"']: file = file[1:-2]
-        with open(file): pass
-    except IndexError:
-        file = "grains/Grain_N100_S1p0_B3p0.txt"
-    except FileNotFoundError:
-        print('\n[ERROR] File "', argv[1] ,'" not found.\n   Correct syntax: python throwManyPhotons.py [filename (string)] [count (int)] [angle (float or lambda)] [verbose (bool)]\nMore information on https://photoelectric-heating-on-interstallar-grains.readthedocs.io/en/latest/throwManyPhotons.html\n')
-        sys.exit(1)
-    
-    try:
-        count = int(argv[2])
-    except ValueError:
-        print('\n[ERROR] "count" parameter must be an integer.\n   Correct syntax: python throwManyPhotons.py [filename (string)] [count (int)] [angle (float or lambda)] [verbose (bool)]\nMore information on https://photoelectric-heating-on-interstallar-grains.readthedocs.io/en/latest/throwManyPhotons.html\n')
-        sys.exit(1)
-    except IndexError:
-        count = 1000
-
-    try:
-        angle = argv[3]
-        if angle[0] == angle[-1] in ["'",'"']: angle = angle[1:-2]
-        eval(angle)
-    except IndexError:
-        angle = 0
-    except:
-        print('\n[ERROR] "angle" parameter not correct. It must be a number or an expression that can be evaluated by python (ex: rand() * 2 * pi)\n   Correct syntax: python throwManyPhotons.py [filename (string)] [count (int)] [angle (float or lambda)] [verbose (bool)]\nMore information on https://photoelectric-heating-on-interstallar-grains.readthedocs.io/en/latest/throwManyPhotons.html\n')
-        raise
-
-    try:
-        Tx = argv[4]
-        if Tx[0] == Tx[-1] in ["'",'"']: Tx = Tx[1:-2]
-        from numpy import pi
-        from numpy.random.mtrand import rand
-        eval(Tx)
-    except IndexError:
-        Tx = 0
-    except:
-        print('\n[ERROR] "Tx" parameter not correct. It must be a number or an expression that can be evaluated by python (ex: rand() * 2 * pi)\n   Correct syntax: python throwManyPhotons.py [filename (string)] [count (int)] [angle (float or lambda)] [verbose (bool)]\nMore information on https://photoelectric-heating-on-interstallar-grains.readthedocs.io/en/latest/throwManyPhotons.html\n')
-        raise
-
-    try:
-        Ty = argv[5]
-        if Ty[0] == Tx[-1] in ["'",'"']: Ty = Ty[1:-2]
-        from numpy import pi
-        from numpy.random.mtrand import rand
-        eval(Ty)
-    except IndexError:
-        Ty = 0
-    except:
-        print('\n[ERROR] "Ty" parameter not correct. It must be a number or an expression that can be evaluated by python (ex: rand() * 2 * pi)\n   Correct syntax: python throwManyPhotons.py [filename (string)] [count (int)] [angle (float or lambda)] [verbose (bool)]\nMore information on https://photoelectric-heating-on-interstallar-grains.readthedocs.io/en/latest/throwManyPhotons.html\n')
-        raise
-
-    try:
-        verbose = argv[6].lower() in ["true","1"]
-    except ValueError:
-        print('\n[ERROR] "verbose" parameter must be set to "True" or "False".\n   Correct syntax: python throwManyPhotons.py [filename (string)] [count (int)] [angle (float or lambda)] [verbose (bool)]\nMore information on https://photoelectric-heating-on-interstallar-grains.readthedocs.io/en/latest/throwManyPhotons.html\n')
-        sys.exit(1)
-    except IndexError:
-        verbose = True
-
-    start = time.time()
-
-    throwManyPhotons(file, count, angle = angle, target=[Tx,Ty], verbose = verbose)
-    
-    end = time.time()
-    print("Simulation time: ", end - start)
+    import run
+    run.simulation("grains/example.txt",1000,"rand()*2*pi",["rand()","rand()"],True)
     
     
     

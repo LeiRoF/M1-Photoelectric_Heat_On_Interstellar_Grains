@@ -6,7 +6,6 @@ import grain as G
 import os
 import distrib
 from numpy.random.mtrand import randint
-
 from numpy import pi # do not remove even if seems to be unused
 from numpy.random.mtrand import rand # do not remove even if seems to be unused
 
@@ -25,10 +24,9 @@ def isAbsorbed(grain, dist, Rx, Ry, Dx, Dy, step= 0.001):
     else:
         return False, Rx, Ry, hitPos
 
-def throwOnePhoton(file, angle = 0, target = ["rand()","rand()"], verbose = False):
+def run(grain, angle = 0, target = ["rand()","rand()"], verbose = False, name="grain"):
 
-    name = os.path.splitext(file)[0].split("/")[-1].split("\\")[-1] # Getting file name
-    grain = G.getFromFile(file)
+    #name = os.path.splitext(file)[0].split("/")[-1].split("\\")[-1] # Getting file name
     start_pos = randint(len(grain))
     E = 3+rand()*12 # Photon energy 3 < E < 15 eV
     Ei = G.getIonisationEnergy(grain)
@@ -45,10 +43,17 @@ def throwOnePhoton(file, angle = 0, target = ["rand()","rand()"], verbose = Fals
     Oy = 0 if Dy > 0 else len(grain)
 
     # Targeted point (the photon trajectory touch this point)
+    print(target)
+    print(grain)
     Tx = eval(target[0])*len(grain)
     Ty = eval(target[1])*len(grain)
 
-    A = min((Tx - Ox)/Dx, (Ty - Oy)/Dy)
+    if Dx == 0 and Dy == 0: 
+        Dx = 1.0
+
+    if Dx == 0: A = (Ty - Oy)/Dy
+    elif Dy == 0: A = (Tx - Ox)/Dx
+    else: A = min((Tx - Ox)/Dx, (Ty - Oy)/Dy)
 
     # Coordinates of the photon when it appear on the matrix
     Rx = Tx - Dx * A
@@ -185,50 +190,7 @@ def throwOnePhoton(file, angle = 0, target = ["rand()","rand()"], verbose = Fals
 
 if __name__ == "__main__":
 
-    try:
-        file = argv[1]
-        if file[0] == file[-1] in ["'",'"']: file = file[1:-2]
-        with open(file): pass
-    except IndexError:
-        file = "grains/Grain_N100_S1p0_B3p0.txt"
-    except FileNotFoundError:
-        print('\n[ERROR] File "', argv[1] ,'" not found. Correct syntax: python throwManyPhotons.py [filename (string)] [count (int)]\nMore information on https://photoelectric-heating-on-interstallar-grains.readthedocs.io/en/latest/throwOnePhoton.html\n')
-        sys.exit(1)
-
-    try:
-        angle = argv[2]
-        if angle[0] == angle[-1] in ["'",'"']: angle = angle[1:-2]
-        eval(angle)
-    except IndexError:
-        angle = 0
-    except:
-        print('\n[ERROR] "angle" parameter not correct. It must be a number or an expression that can be evaluated by python (ex: rand() * 2 * pi)\n   Correct syntax: python throwOnePhoton.py [filename (string)] [angle (lambda)] [target X (lambda)] [target Y (lambda)] [verbose (bool)]\nMore information on https://photoelectric-heating-on-interstallar-grains.readthedocs.io/en/latest/throwOnePhoton.html\n')
-        raise
-
-    try:
-        Tx = argv[3]
-        if Tx[0] == Tx[-1] in ["'",'"']: Tx = Tx[1:-2]
-        from numpy import pi
-        from numpy.random.mtrand import rand
-        eval(Tx)
-    except IndexError:
-        Tx = 0
-    except:
-        print('\n[ERROR] "Tx" parameter not correct. It must be a number or an expression that can be evaluated by python (ex: rand() * 2 * pi)\n   Correct syntax: python throwOnePhoton.py [filename (string)] [angle (lambda)] [target X (lambda)] [target Y (lambda)] [verbose (bool)]\nMore information on https://photoelectric-heating-on-interstallar-grains.readthedocs.io/en/latest/throwOnePhoton.html\n')
-        raise
-
-    try:
-        Ty = argv[4]
-        if Ty[0] == Tx[-1] in ["'",'"']: Ty = Ty[1:-2]
-        from numpy import pi
-        from numpy.random.mtrand import rand
-        eval(Ty)
-    except IndexError:
-        Ty = 0
-    except:
-        print('\n[ERROR] "Ty" parameter not correct. It must be a number or an expression that can be evaluated by python (ex: rand() * 2 * pi)\n   Correct syntax: python throwOnePhoton.py [filename (string)] [angle (lambda)] [target X (lambda)] [target Y (lambda)] [verbose (bool)]\nMore information on https://photoelectric-heating-on-interstallar-grains.readthedocs.io/en/latest/throwOnePhoton.html\n')
-        raise
-
-    throwOnePhoton(file, angle = angle, target = [Tx,Ty], verbose = True)
+    import run
+    run.simulation("grains/example.txt",1,"rand()*2*pi",["rand()","rand()"],True)
     plt.show()
     
