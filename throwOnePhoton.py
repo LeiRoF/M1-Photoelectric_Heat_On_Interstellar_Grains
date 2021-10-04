@@ -43,8 +43,6 @@ def run(grain, angle = 0, target = ["rand()","rand()"], verbose = False, name="g
     Oy = 0 if Dy > 0 else len(grain)
 
     # Targeted point (the photon trajectory touch this point)
-    print(target)
-    print(grain)
     Tx = eval(target[0])*len(grain)
     Ty = eval(target[1])*len(grain)
 

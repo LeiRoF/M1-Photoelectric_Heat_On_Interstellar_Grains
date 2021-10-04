@@ -44,7 +44,7 @@ def askParameters(N, sigma_dens, beta):
 
     return N, sigma_dens, beta
 
-def generate3D(N = None, sigma_dens = None, beta = None, path = "./grains/", doplot = 0, writeFile = True, verbose = False):
+def generate3D(N = None, sigma_dens = None, beta = None, path = "./grains/", doplot = 0, writeFile = True, verbose = False, name = None):
     N, sigma_dens, beta = askParameters(N, sigma_dens, beta)
     if N % 2 == 1: N = N+1
 
@@ -88,7 +88,12 @@ def generate3D(N = None, sigma_dens = None, beta = None, path = "./grains/", dop
         if not os.path.isdir(path):
             os.makedirs(path)
 
-        with open(path + "3D-Grain_N{}_S{}p{}_B{}p{}.txt".format(int(N),int(sigma_dens),int(sigma_dens*10),int(beta),int(beta*10)),"w+") as file:
+        if name is None:
+            name = "3D-N{}_S{}p{}_B{}p{}.txt".format(int(N),int(sigma_dens),int(sigma_dens*10%10),int(beta),int(beta*10%10))
+        else:
+            name = name + ".txt"
+
+        with open(path + name,"w+") as file:
             for section in grain:
                 for row in section:
                     file.write(" ".join([str(x) for x in row]) + "\n")
@@ -136,7 +141,7 @@ def group(grain, x0,y0, N, doplot = 0):
     pl.ioff()
     return progress
 
-def generate(N = None, sigma_dens = None, beta = None, path = "./grains/", doplot = 0, writeFile = True, verbose = False, id3D = 0):
+def generate(N = None, sigma_dens = None, beta = None, path = "./grains/", doplot = 0, writeFile = True, verbose = False, id3D = 0, name = None):
     """
     N.B.: the grains are generated randomly => a single grain is not necessarily 
         representative of the fractal parameters. Only a statistically significant
@@ -204,11 +209,13 @@ def generate(N = None, sigma_dens = None, beta = None, path = "./grains/", doplo
     if writeFile:
         if not os.path.isdir(path):
             os.makedirs(path)
-        np.savetxt(path + "Grain_N%i_S%ip%i_B%ip%i.txt" % (N, int(sigma_dens), \
-                                                    int((sigma_dens-int(sigma_dens))*10), \
-                                                    int(beta), \
-                                                    int((beta-int(beta))*10)), \
-                                                    grain2, fmt='%i')
+
+        if name is None:
+            name = "2D-N{}_S{}p{}_B{}p{}.txt".format(int(N),int(sigma_dens),int(sigma_dens*10%10),int(beta),int(beta*10%10))
+        else:
+            name = name + ".txt"
+
+        np.savetxt(path + name, grain2)
 
     if (doplot>=1):
         pl.figure(figsize=(20,10))
@@ -230,7 +237,7 @@ def generate(N = None, sigma_dens = None, beta = None, path = "./grains/", doplo
 
         if not __name__ == "__main__": pl.show()   
     
-    return [id3D, grain2]
+    return [id3D, grain2, name]
 
 
 
@@ -239,12 +246,7 @@ def getFromFile(file):
     """
     Convert txt file to numpy array
     """
-
-    with open(file, "r") as file:
-        array = []
-        for line in file:
-            array.append([int(x) for x in line.split(" ")])
-    return np.array(array)
+    return np.loadtxt(file)
 
 
 def getSize(grain):
@@ -301,9 +303,9 @@ if __name__ == "__main__":
 
     #generate3D(writeFile=True)
     #"""
-    generate(None, None, None,doplot=1)
+    _,_,name = generate(None, None, None,doplot=1)
 
-    grain = getFromFile("grains/Grain_N100_S1p0_B3p0.txt")
+    grain = getFromFile("grains/" + name)
     size = getCorrectedSize(grain)
     Nc = getNbCarbon(size=size)
     Ei = getIonisationEnergy(Nc = Nc)
