@@ -1,9 +1,11 @@
-
+import run
 import matplotlib.pyplot as plt
 import time
 import numpy as np
 import sys
 from sys import argv
+import os
+import grain as G
 
 
 def askFile(file = None):
@@ -21,44 +23,22 @@ def askFile(file = None):
         lock = True
         while lock:
             try:
-                list = ""
-                list = input("\nSelect grain file (must be present in the 'grains' folder and not contain space or comma) or a file list separeted with a comma. Write 'all' to run simulation on every file in the 'grains' folder. You can generate one using: python grain.py\n\nYour file [example.txt]: ")
-                if list == "":
-                    print("example.txt")
-                    if not os.path.isfile("grains/example.txt"):
-                        print("Generating example grain...")
-                        G.generate(N = 100, sigma_dens = 1.0, beta = 3.0, path = "./grains/", doplot = 0, writeFile = True, verbose = False, id3D = 0, name="example")
-                    grains.append(G.getFromFile("grains/example.txt"))
-                    names.append("example") # Getting file name
-                    print("\nSelected file(s):")
-                    print(" - example.txt")
-                    lock = False
-
-                elif list.lower() in ["a", "all"]:
-                    print("\nSelected file(s):")
-                    for file in os.listdir("./grains/"):
-                        print(" - " + file)
-                        grains.append(G.getFromFile("grains/" + file))
-                        names.append(os.path.splitext(file)[0]) # Getting file name
+                file = ""
+                file = input("\nSelect result file (must be present in the 'results' folder and not contain space or comma).\n\nYour file [example.dat]: ")
+                if file == "":
+                    print("example.dat")
+                    file = "results/example.dat"
                     lock = False
                 else:
-                    list.replace(" ","").split(",")
-                    if type(list) is str: list = [list]
-                    print("\nSelected file(s):")
-                    for file in list:
-                        if file[-4:] != ".txt":
-                            file += ".txt"
-                        print(" - " + file)
-                        grains.append(G.getFromFile("grains/" + file))
-                        names.append(os.path.splitext(file)[0])
+                    if file[-4:] != ".dat":
+                        file = "results/" + file + ".dat"
                     lock = False
+                open(file)
             except KeyboardInterrupt:
-                endProgram()
+                run.endProgram()
             except:
-                print("\n[Error] Cannot open or interprete your file '" + file + "' as a grain")
-                #raise
-
-    return grains, names
+                print("\n[Error] Cannot open or interprete your data file '" + file + "'")
+    return file
 
 def plotEnergy(file):
     y = []
@@ -81,15 +61,19 @@ def plotEnergy(file):
     end = time.time()
     print("Elapsed time to read data: ", end - start)
 
+    
+    plt.figure(num=os.path.splitext(file)[0].split("/")[-1].split("\\")[-1])
+
     plt.subplot(121)
-    plt.hist(y,bins=50)
+    plt.hist(y,bins=min(50,int(len(y)/10)))
     plt.title("Energy of emitted photons"); plt.xlabel("Energie (eV)"); plt.ylabel("Nb electrons emitted")
 
     plt.subplot(122)
     plt.bar(0,events[0],label="photon passed through the grain"); plt.bar(1,events[1],label="photon was absorbed but no electon was emitted"); plt.bar(2,events[2],label="an electron was emitted but was re-absorbed in the grain"); plt.bar(3,events[3],label="the electron escaped from the grain")
     plt.title("Event proportion"); plt.xlabel("Event type"); plt.ylabel("Number of events"); plt.legend()
 
-    plt.show()
 
 if __name__ == "__main__":
-    plotEnergy("results/Grain_N100_S1p0_B3p0.dat")
+    file = askFile()
+    plotEnergy(file)
+    plt.show()

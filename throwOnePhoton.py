@@ -31,8 +31,9 @@ def run(grain, angle = 0, target = ["rand()","rand()"], verbose = False, name="g
     E = 3+rand()*12 # Photon energy 3 < E < 15 eV
     Ei = G.getIonisationEnergy(grain)
     grain1D = grain[start_pos] # We consider only the dimension corresponding to the direction of the photon
-
     angle = eval(angle)
+    
+    plt.figure(num=name)
 
     # Deplacment vector
     Dx = np.cos(angle)
@@ -184,11 +185,21 @@ def run(grain, angle = 0, target = ["rand()","rand()"], verbose = False, name="g
     return  E - Ei
     
 
-    
+def empty(figure):
+    """
+    Return whether the figure contains no Artists (other than the default
+    background patch).
+    """
+    print(figure.get_children())
+    contained_artists = figure.get_children()
+    return len(contained_artists) <= 1
 
 if __name__ == "__main__":
 
     import run
-    run.simulation("grains/example.txt",1,"rand()*2*pi",["rand()","rand()"],True)
-    plt.show()
+    run.simulation("example.txt",1,"rand()*2*pi",["rand()","rand()"],True)
+    
+    fig = plt.figure()
+    if not empty(fig):
+        plt.show()
     

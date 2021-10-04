@@ -5,6 +5,7 @@ import time
 from multiprocessing import Pool
 import grain as G
 import os
+import matplotlib.pyplot as plt
 
 from numpy import pi # do not remove even if seems to be unused
 from numpy.random.mtrand import rand # do not remove even if seems to be unused
@@ -14,18 +15,14 @@ def endProgram(reason="interrupted"):
     else:print("\nProgram interrupted.")
     sys.exit()
 
-def askGrains(file = None):
+def askGrains():
     grains = []
     names = []
     try:
-        if file is not None:
-            grains.append(G.getFromFile("grains/" + file))
-            names.append(os.path.splitext(file)[0].split("/")[-1].split("\\")[-1]) # Getting file name
-        else:
-            file = argv[1]
-            if file[0] == file[-1] in ["'",'"']: file = file[1:-2]
-            grains.append(G.getFromFile("grains/" + file))
-            names.append(os.path.splitext(file)[0])
+        file = argv[1]
+        if file[0] == file[-1] in ["'",'"']: file = file[1:-2]
+        grains.append(G.getFromFile("grains/" + file))
+        names.append(os.path.splitext(file)[0])
     except FileNotFoundError:
         print('\n[ERROR] File "', argv[1] ,'" not found.\n   Correct syntax: python throwManyPhotons.py [filename (string)] [count (int)] [angle (float or lambda)] [verbose (bool)]\nMore information on https://photoelectric-heating-on-interstallar-grains.readthedocs.io/en/latest/throwManyPhotons.html')
         sys.exit()
@@ -72,7 +69,7 @@ def askGrains(file = None):
 
     return grains, names
 
-def askCount(count = None):
+def askCount():
     try:
         count = int(argv[2])
     except ValueError:
@@ -97,7 +94,7 @@ def askCount(count = None):
     return count
             
 
-def askAngle(angle = None):
+def askAngle():
     try:
         angle = argv[3]
         if angle[0] == angle[-1] in ["'",'"']: angle = angle[1:-2]
@@ -124,47 +121,46 @@ def askAngle(angle = None):
     return angle
 
 
-def askTarget(target = []):
-    if target == []:
-        try:
-            Tx = argv[4]
-            if Tx[0] == Tx[-1] in ["'",'"']: Tx = Tx[1:-2]
-            eval(Tx)
-            Ty = argv[5]
-            if Ty[0] == Tx[-1] in ["'",'"']: Ty = Ty[1:-2]
-            eval(Ty)
+def askTarget():
+    try:
+        Tx = argv[4]
+        if Tx[0] == Tx[-1] in ["'",'"']: Tx = Tx[1:-2]
+        eval(Tx)
+        Ty = argv[5]
+        if Ty[0] == Tx[-1] in ["'",'"']: Ty = Ty[1:-2]
+        eval(Ty)
 
-            target = [Tx,Ty]
-        except IndexError:
-            lock = True
-            while lock:
-                Tx = input("\nTarget position X [rand()]: ")
-                try:
-                    if Tx == "": Tx = "rand()"; print("rand()")
-                    float(eval(Tx))
-                    lock = False
-                except:
-                    print("\n[Error] Incorrect value. You must enter a float value that represent the X coordinate of the photon's target point (must be included beetween 0 and 1). You can also enter an expression that will be evaluated to get this coordinate. Ex: rand()")
-            
-            lock = True
-            while lock:
-                Ty = input("\nTarget position Y [rand()]: ")
-                try:
-                    if Ty == "": Ty = "rand()"; print("rand()")
-                    float(eval(Ty))
-                    lock = False
-                except:
-                    print("\n[Error] Incorrect value. You must enter a float value that represent the Y coordinate of the photon's target point (must be included beetween 0 and 1). You can also enter an expression that will be evaluated to get this coordinate. Ex: rand()")
-            
-            target = [Tx,Ty]
-        except KeyboardInterrupt:
-            endProgram()
-        except:
-            print('\n[ERROR] "Tx" parameter not correct. It must be a number or an expression that can be evaluated by python (ex: rand() * 2 * pi)\n   Correct syntax: python throwManyPhotons.py [filename (string)] [count (int)] [angle (float or lambda)] [verbose (bool)]\nMore information on https://photoelectric-heating-on-interstallar-grains.readthedocs.io/en/latest/throwManyPhotons.html')
-            raise
+        target = [Tx,Ty]
+    except IndexError:
+        lock = True
+        while lock:
+            Tx = input("\nTarget position X [rand()]: ")
+            try:
+                if Tx == "": Tx = "rand()"; print("rand()")
+                float(eval(Tx))
+                lock = False
+            except:
+                print("\n[Error] Incorrect value. You must enter a float value that represent the X coordinate of the photon's target point (must be included beetween 0 and 1). You can also enter an expression that will be evaluated to get this coordinate. Ex: rand()")
+        
+        lock = True
+        while lock:
+            Ty = input("\nTarget position Y [rand()]: ")
+            try:
+                if Ty == "": Ty = "rand()"; print("rand()")
+                float(eval(Ty))
+                lock = False
+            except:
+                print("\n[Error] Incorrect value. You must enter a float value that represent the Y coordinate of the photon's target point (must be included beetween 0 and 1). You can also enter an expression that will be evaluated to get this coordinate. Ex: rand()")
+        
+        target = [Tx,Ty]
+    except KeyboardInterrupt:
+        endProgram()
+    except:
+        print('\n[ERROR] "Tx" parameter not correct. It must be a number or an expression that can be evaluated by python (ex: rand() * 2 * pi)\n   Correct syntax: python throwManyPhotons.py [filename (string)] [count (int)] [angle (float or lambda)] [verbose (bool)]\nMore information on https://photoelectric-heating-on-interstallar-grains.readthedocs.io/en/latest/throwManyPhotons.html')
+        raise
     return target
         
-def askVerbose(verbose):
+def askVerbose():
     try:
         verbose = argv[6].lower() in ["true","1"]
     except ValueError:
@@ -186,18 +182,21 @@ def askVerbose(verbose):
 
 def simulation(file = None, count = None, angle = None, target = [], verbose = None):
 
-    grains, names = askGrains(file)
+    if file is None:
+        grains, names = askGrains()
+    else:
+        if type(file) == str : file = [file]
+        grains = []
+        names = []
+        for i in file:
+            grains.append(G.getFromFile("grains/" + i))
+            names.append(os.path.splitext(i)[0].split("/")[-1].split("\\")[-1])
     if len(grains) == 0: endProgram(reason="noGrain")
     
-    count = askCount(count)
-    
-    angle = askAngle(angle)
-
-    target = askTarget(target)
-
-    verbose = askVerbose(verbose)
-
-    
+    if count is None : count = askCount()
+    if angle is None : angle = askAngle()
+    if target is None : target = askTarget()
+    if verbose is None : verbose = askVerbose()
 
     for i in range(len(grains)):
         print("\nRunngin simulation n°",i+1,"/",len(grains),":",names[i])
@@ -207,8 +206,9 @@ def simulation(file = None, count = None, angle = None, target = [], verbose = N
 
         print("Simulation time: ", simuTime)
         with open("timeStats.dat","a") as stats:
-            stats.write(str(count) + " " + str(len(grains[i])) + " " + str(max(os.cpu_count()-1,1)) + " " + str(round(simuTime,3)) + " 1.0 \n")
+            stats.write("1.0 " + str(count) + " " + str(len(grains[i])) + " " + str(max(os.cpu_count()-1,1)) + " " + str(round(simuTime,3)) + "\n")
     
 
 if __name__ == "__main__":
     simulation()
+    plt.show()
