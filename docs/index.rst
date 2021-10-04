@@ -51,6 +51,9 @@ Helpers:
    :maxdepth: 2
    :caption: Files documentation
 
-   distributionTools.md
+   run.md
+   grain.md
+   data.md
+   distrib.md
    throwOnePhoton.md
    throwManyPhotons.md

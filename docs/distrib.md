@@ -1,4 +1,4 @@
-# distributionTools.py
+# distrib.py
 
 This file contains 2 functions that helps to manage distributions.
 

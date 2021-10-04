@@ -14,7 +14,7 @@ def endProgram(reason="interrupted"):
     else:print("\nProgram interrupted.")
     sys.exit()
 
-def simulation(file = None, count = None, angle = None, target = [], verbose = None):
+def askGrains(file = None):
     grains = []
     names = []
     try:
@@ -69,8 +69,10 @@ def simulation(file = None, count = None, angle = None, target = [], verbose = N
             except:
                 print("\n[Error] Cannot open or interprete your file '" + file + "' as a grain")
                 #raise
-    if len(grains) == 0: endProgram(reason="noGrain")
-    
+
+    return grains, names
+
+def askCount(count = None):
     try:
         count = int(argv[2])
     except ValueError:
@@ -92,7 +94,10 @@ def simulation(file = None, count = None, angle = None, target = [], verbose = N
             except:
                 print("\n[Error] Incorrect value. You must enter a positive integer.")
 
+    return count
+            
 
+def askAngle(angle = None):
     try:
         angle = argv[3]
         if angle[0] == angle[-1] in ["'",'"']: angle = angle[1:-2]
@@ -116,6 +121,10 @@ def simulation(file = None, count = None, angle = None, target = [], verbose = N
         print('\n[ERROR] "angle" parameter not correct. It must be a number or an expression that can be evaluated by python (ex: rand() * 2 * pi)\n   Correct syntax: python throwManyPhotons.py [filename (string)] [count (int)] [angle (float or lambda)] [verbose (bool)]\nMore information on https://photoelectric-heating-on-interstallar-grains.readthedocs.io/en/latest/throwManyPhotons.html')
         raise
 
+    return angle
+
+
+def askTarget(target = []):
     if target == []:
         try:
             Tx = argv[4]
@@ -153,7 +162,9 @@ def simulation(file = None, count = None, angle = None, target = [], verbose = N
         except:
             print('\n[ERROR] "Tx" parameter not correct. It must be a number or an expression that can be evaluated by python (ex: rand() * 2 * pi)\n   Correct syntax: python throwManyPhotons.py [filename (string)] [count (int)] [angle (float or lambda)] [verbose (bool)]\nMore information on https://photoelectric-heating-on-interstallar-grains.readthedocs.io/en/latest/throwManyPhotons.html')
             raise
-
+    return target
+        
+def askVerbose(verbose):
     try:
         verbose = argv[6].lower() in ["true","1"]
     except ValueError:
@@ -171,13 +182,33 @@ def simulation(file = None, count = None, angle = None, target = [], verbose = N
         except KeyboardInterrupt:
             endProgram()
 
-    start = time.time()
+    return verbose
+
+def simulation(file = None, count = None, angle = None, target = [], verbose = None):
+
+    grains, names = askGrains(file)
+    if len(grains) == 0: endProgram(reason="noGrain")
+    
+    count = askCount(count)
+    
+    angle = askAngle(angle)
+
+    target = askTarget(target)
+
+    verbose = askVerbose(verbose)
+
+    
 
     for i in range(len(grains)):
+        print("\nRunngin simulation n°",i+1,"/",len(grains),":",names[i])
+        simuTime = time.time()
         throwManyPhotons.run(grains[i], count, angle = angle, target=target, verbose = verbose, name=names[i])
+        simuTime = time.time() - simuTime
+
+        print("Simulation time: ", simuTime)
+        with open("timeStats.dat","a") as stats:
+            stats.write(str(count) + " " + str(len(grains[i])) + " " + str(max(os.cpu_count()-1,1)) + " " + str(round(simuTime,3)) + " 1.0 \n")
     
-    end = time.time()
-    print("Simulation time: ", end - start)
 
 if __name__ == "__main__":
     simulation()

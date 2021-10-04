@@ -7,7 +7,6 @@ import os
 from GRF_routines import addGRF
 from multiprocessing import Pool
 
-
 def askParameters(N, sigma_dens, beta):
     # size of the grain image (default = 100)
     if not N:
