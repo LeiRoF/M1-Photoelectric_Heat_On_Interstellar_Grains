@@ -34,7 +34,7 @@ def simulation(file = None, count = None, angle = None, target = [], verbose = N
         while lock:
             try:
                 list = ""
-                list = input("\nSelect grain file (must be present in the 'grains' folder and not contain space or comma) or a file list separeted with a comma. Wirte 'all' to run simulation on every file in the 'grains' folder. You can generate one using: python grain.py\n\nYour file [example.txt]: ")
+                list = input("\nSelect grain file (must be present in the 'grains' folder and not contain space or comma) or a file list separeted with a comma. Write 'all' to run simulation on every file in the 'grains' folder. You can generate one using: python grain.py\n\nYour file [example.txt]: ")
                 if list == "":
                     print("example.txt")
                     if not os.path.isfile("grains/example.txt"):
@@ -79,9 +79,9 @@ def simulation(file = None, count = None, angle = None, target = [], verbose = N
     except IndexError:
         lock = True
         while lock:
-            count = input("\nNumber of photon [100]: ")
+            count = input("\nNumber of photon [1000]: ")
             try:
-                if count == "": count = 100; print("100")
+                if count == "": count = 1000; print("1000")
                 count = int(count)
                 if count < 0 :
                     raise
@@ -166,7 +166,7 @@ def simulation(file = None, count = None, angle = None, target = [], verbose = N
                 verbose = input("\nVerbose? [no]: ")
                 if verbose == "": verbose = "no"; print("no")
                 if verbose.lower() in ["1", "true", "t","y","yes"]: verbose = True; lock = False
-                elif verbose.lower() in ["0", "false", "f","n","no"]: verbose = True; lock = False
+                elif verbose.lower() in ["0", "false", "f","n","no"]: verbose = False; lock = False
                 else: print("\n[Error] Incorrect value. Just answer by 'yes' or 'no'\n")
         except KeyboardInterrupt:
             endProgram()
