@@ -6,6 +6,9 @@ from multiprocessing import Pool
 import grain as G
 import os
 import matplotlib.pyplot as plt
+import cpuinfo
+
+cpu = cpuinfo.get_cpu_info()["brand_raw"].replace(" ","_")
 
 from numpy import pi # do not remove even if seems to be unused
 from numpy.random.mtrand import rand # do not remove even if seems to be unused
@@ -198,6 +201,10 @@ def simulation(file = None, count = None, angle = None, target = [], verbose = N
     if target is None : target = askTarget()
     if verbose is None : verbose = askVerbose()
 
+    if not os.path.isfile("timeStats.dat"):
+        with open("timeStats.dat","a") as stats:
+            stats.write("program_version number_of_photon grain_size number_of_threads time_ellapsed cpu_info\n")
+
     for i in range(len(grains)):
         print("\nRunngin simulation n°",i+1,"/",len(grains),":",names[i])
         simuTime = time.time()
@@ -205,8 +212,11 @@ def simulation(file = None, count = None, angle = None, target = [], verbose = N
         simuTime = time.time() - simuTime
 
         print("Simulation time: ", simuTime)
+
+        
+
         with open("timeStats.dat","a") as stats:
-            stats.write("1.0 " + str(count) + " " + str(len(grains[i])) + " " + str(max(os.cpu_count()-1,1)) + " " + str(round(simuTime,3)) + "\n")
+            stats.write("1.0 " + str(count) + " " + str(len(grains[i])) + " " + str(max(os.cpu_count()-1,1)) + " " + str(round(simuTime,3)) + " " + cpu + "\n")
     
 
 if __name__ == "__main__":

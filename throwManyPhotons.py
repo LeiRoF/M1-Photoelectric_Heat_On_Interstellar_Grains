@@ -27,8 +27,6 @@ def run(grain, count, angle = 0, target = ["rand()","rand()"], verbose = False, 
 
     # Not Vetbose -> Simulation parrallelized
     else:
-        print("name =", name)
-        print("grain =", grain)
         list = [(grain,angle,target,False,name)]*count
         cores = max(os.cpu_count()-1,1)
         print("Executing simulation on ", cores , " threads")
