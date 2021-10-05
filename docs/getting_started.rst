@@ -33,7 +33,7 @@ You have 3 ways to run a simulation:
 .. warning::
 
     For each way, please keep in mind that the programm will use every core of your processor and
-    **can't be stopped**. Try to increment the complexity of the simulation progressively. 1000 photons is the maximum recommanded for the first
+    **can't be manually stopped**. Try to increment the complexity of the simulation progressively. 1000 photons is the maximum recommanded for the first
     try.
 
 **Guided**
@@ -115,7 +115,7 @@ Every parameters that are not precised here will be asked to the user.
 **Integrated as python module**
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-To import a program as a module, put the source folder next to you
+To import a program as a module, put the source folder next to your
 program and add the following line in your program:
 
 .. code:: python
