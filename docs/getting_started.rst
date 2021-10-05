@@ -126,13 +126,13 @@ Then, in order to run a simulation, call the function:
 
 .. code:: python
 
-    fig.run.simulation(file,count,angle,target,verbose)
+    phig.run.simulation(file,count,angle,target,verbose)
 
 Example:
 
 .. code:: python
 
-    fig.run.simulation("example.txt",1,"rand()*2*pi",["rand()","rand()"],True)
+    phig.run.simulation("example.txt",1,"rand()*2*pi",["rand()","rand()"],True)
 
 .. note::
 
