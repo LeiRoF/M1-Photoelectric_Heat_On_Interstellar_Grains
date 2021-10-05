@@ -45,3 +45,4 @@ program_version number_of_photon grain_size number_of_threads time_ellapsed cpu_
 1.0 1 73 15 0.725 AMD_Ryzen_7_2700X_Eight-Core_Processor
 1.0 1 73 15 0.702 AMD_Ryzen_7_2700X_Eight-Core_Processor
 1.0 10000 73 15 56.558 AMD_Ryzen_7_2700X_Eight-Core_Processor
+1.0 1000 100 7 37.164 11th_Gen_Intel(R)_Core(TM)_i7-1165G7_@_2.80GHz

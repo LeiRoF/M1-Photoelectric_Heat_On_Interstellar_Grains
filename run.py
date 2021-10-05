@@ -136,8 +136,14 @@ def askTarget():
         if Ty[0] == Tx[-1] in ["'",'"']: Ty = Ty[1:-2]
         eval(Ty)
 
-        target = [Tx,Ty]
+        return [Tx,Ty]
     except IndexError:
+        pass
+    except:
+        print('\n[ERROR] "Tx" parameter not correct. It must be a number or an expression that can be evaluated by python (ex: rand() * 2 * pi)\n   Correct syntax: python throwManyPhotons.py [filename (string)] [count (int)] [angle (float or lambda)] [verbose (bool)]\nMore information on https://photoelectric-heating-on-interstallar-grains.readthedocs.io/en/latest/throwManyPhotons.html')
+        raise
+
+    try:
         lock = True
         while lock:
             Tx = input("\nTarget position X [rand()]: ")
@@ -158,13 +164,9 @@ def askTarget():
             except:
                 print("\n[Error] Incorrect value. You must enter a float value that represent the Y coordinate of the photon's target point (must be included beetween 0 and 1). You can also enter an expression that will be evaluated to get this coordinate. Ex: rand()")
         
-        target = [Tx,Ty]
+        return [Tx,Ty]
     except KeyboardInterrupt:
         endProgram()
-    except:
-        print('\n[ERROR] "Tx" parameter not correct. It must be a number or an expression that can be evaluated by python (ex: rand() * 2 * pi)\n   Correct syntax: python throwManyPhotons.py [filename (string)] [count (int)] [angle (float or lambda)] [verbose (bool)]\nMore information on https://photoelectric-heating-on-interstallar-grains.readthedocs.io/en/latest/throwManyPhotons.html')
-        raise
-    return target
         
 def askVerbose():
     try:
@@ -203,7 +205,7 @@ def simulation(file = None, count = None, angle = None, target = [], verbose = N
     
     if count is None : count = askCount()
     if angle is None : angle = askAngle()
-    if target is None : target = askTarget()
+    if target == [] : target = askTarget()
     if verbose is None : verbose = askVerbose()
 
     if not os.path.isfile("timeStats.dat"):
