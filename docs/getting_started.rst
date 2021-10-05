@@ -30,6 +30,12 @@ Start
 
 You have 3 ways to run a simulation:
 
+.. warning::
+
+    For each way, please keep in mind that the programm will use every core of your processor and
+    **can't be stopped**. Try to increment the complexity of the simulation progressively. 1000 photons is the maximum recommanded for the first
+    try.
+
 **Guided**
 ~~~~~~~~~~
 
@@ -67,12 +73,6 @@ Every parameters that are not precised here will be asked to the user.
     ``'[file_1,file_2]'``
 
 -  ``count``: Number of simulated photons
-
-.. warning::
-    The programm will use every core of your processor and
-    **can't be stopped**. Try to increment the number of photons
-    progressively. 1000 photons is the maximum recommanded for the first
-    try.
 
 -  ``angle``: The angle of the incomming photons in radian. You can also
    write an expression to let the programm decide of the angle. Ex:
