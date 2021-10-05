@@ -12,7 +12,10 @@ from numpy.random.mtrand import rand # do not remove even if seems to be unused
 
 def isAbsorbed(grain, dist, Rx, Ry, Dx, Dy, step= 0.001):
     hitPos = []
-    while 0 <= Rx < len(grain) and 0 <= Ry < len(grain) and dist > 0:
+
+    (sizeX,sizeY) = grain.shape
+
+    while 0 <= Rx < sizeX and 0 <= Ry < sizeY and dist > 0:
         if grain[int(Rx)][int(Ry)]:
             if hitPos == []:
                 hitPos = [Rx,Ry]
@@ -24,28 +27,25 @@ def isAbsorbed(grain, dist, Rx, Ry, Dx, Dy, step= 0.001):
     else:
         return False, Rx, Ry, hitPos
 
-def run(grain, angle = 0, target = ["rand()","rand()"], verbose = False, name="grain"):
+def runSimulation(grain, angle = 0, target = ["rand()","rand()"], verbose = False, name="grain"):
 
-    #name = os.path.splitext(file)[0].split("/")[-1].split("\\")[-1] # Getting file name
-    start_pos = randint(len(grain))
     E = 3+rand()*12 # Photon energy 3 < E < 15 eV
     Ei = G.getIonisationEnergy(grain)
-    grain1D = grain[start_pos] # We consider only the dimension corresponding to the direction of the photon
     angle = eval(angle)
+    (sizeX,sizeY) = grain.shape
     
-    plt.figure(num=name)
 
     # Deplacment vector
     Dx = np.cos(angle)
     Dy = np.sin(angle)
 
     # Origin
-    Ox = 0 if Dx > 0 else len(grain)
-    Oy = 0 if Dy > 0 else len(grain)
+    Ox = 0 if Dx > 0 else sizeX
+    Oy = 0 if Dy > 0 else sizeY
 
     # Targeted point (the photon trajectory touch this point)
-    Tx = eval(target[0])*len(grain)
-    Ty = eval(target[1])*len(grain)
+    Tx = eval(target[0])*sizeX
+    Ty = eval(target[1])*sizeY
 
     if Dx == 0 and Dy == 0: 
         Dx = 1.0
@@ -89,6 +89,7 @@ def run(grain, angle = 0, target = ["rand()","rand()"], verbose = False, name="g
         print("0 - It hit the grain at Rx=", hitPos[0], ", Ry=", hitPos[0])
         print("  - In these conditions, the photon will travel ", round(da,3), "angstroms through the grain")
         xaxis, fx = distrib.plot(lambda x: np.exp(-x/la) / la, 0, 100, 1)
+        plt.figure(num=name)
         plt.subplot(131)
         plt.plot(xaxis,fx,'r--',da,np.exp(-da/la) / la,'bs')
         plt.title("Distance traveled by photon in the grain")
@@ -183,23 +184,10 @@ def run(grain, angle = 0, target = ["rand()","rand()"], verbose = False, name="g
     with open("results/" + name + ".dat","a") as result:
             result.write(str(E - Ei) + '\n')
     return  E - Ei
-    
-
-def empty(figure):
-    """
-    Return whether the figure contains no Artists (other than the default
-    background patch).
-    """
-    print(figure.get_children())
-    contained_artists = figure.get_children()
-    return len(contained_artists) <= 1
 
 if __name__ == "__main__":
 
     import run
     run.simulation("example.txt",1,"rand()*2*pi",["rand()","rand()"],True)
-    
-    fig = plt.figure()
-    if not empty(fig):
-        plt.show()
+    plt.show()
     

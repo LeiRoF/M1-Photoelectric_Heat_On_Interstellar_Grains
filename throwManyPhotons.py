@@ -7,16 +7,17 @@ from numpy import pi # do not remove even if seems to be unused
 from numpy.random.mtrand import rand # do not remove even if seems to be unused
 
 
-def run(grain, count, angle = 0, target = ["rand()","rand()"], verbose = False, name = "grain"):
+def runSimulation(grain, count, angle = 0, target = ["rand()","rand()"], verbose = False, name = "grain"):
 
     y = []
     events = np.zeros(4)
 
-    list = [(grain,angle,target,False,name)]*count
-    cores = os.cpu_count()
+    makeVerbose = count == 1 and verbose == True
+    list = [(grain,angle,target,makeVerbose,name)]*count
+    cores = min(count,os.cpu_count())
     print("Executing simulation on ", cores , " threads")
     with Pool(cores) as p:
-        res = p.starmap(throwOnePhoton.run,list)
+        res = p.starmap(throwOnePhoton.runSimulation,list)
     for energy in res:
         if energy not in [None, -1, -2, -3]:
             y.append(energy)
@@ -37,7 +38,7 @@ def run(grain, count, angle = 0, target = ["rand()","rand()"], verbose = False, 
 
 if __name__ == "__main__":
     import run
-    run.simulation("example.txt",10000,"rand()*2*pi",["rand()","rand()"],True)
+    run.simulation("example.txt",1000,"rand()*2*pi",["rand()","rand()"],True)
     plt.show()
     
     

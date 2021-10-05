@@ -213,12 +213,9 @@ def simulation(file = None, count = None, angle = None, target = [], verbose = N
     for i in range(len(grains)):
         print("\nRunngin simulation n°",i+1,"/",len(grains),":",names[i])
         simuTime = time.time()
-        throwManyPhotons.run(grains[i], count, angle = angle, target=target, verbose = verbose, name=names[i])
+        throwManyPhotons.runSimulation(grains[i], count, angle = angle, target=target, verbose = verbose, name=names[i])
         simuTime = time.time() - simuTime
-
         print("Simulation time: ", simuTime)
-
-        
 
         with open("timeStats.dat","a") as stats:
             stats.write("1.0 " + str(count) + " " + str(len(grains[i])) + " " + str(max(os.cpu_count()-1,1)) + " " + str(round(simuTime,3)) + " " + cpu + "\n")

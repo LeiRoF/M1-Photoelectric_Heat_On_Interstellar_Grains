@@ -14,7 +14,17 @@ def reduceMatrix(grain):
     cols = np.flatnonzero((~mask).sum(axis=0))
 
     crop = grain[rows.min():rows.max()+1, cols.min():cols.max()+1]
-    return crop
+
+
+    return squarify(crop)
+
+def squarify(grain,val = 0):
+    (a,b)=grain.shape
+    if a>b:
+        padding=((0,0),(0,a-b))
+    else:
+        padding=((0,b-a),(0,0))
+    return np.pad(grain,padding,mode='constant',constant_values=val)
 
 def askParameters(N, sigma_dens, beta):
     # size of the grain image (default = 100)
