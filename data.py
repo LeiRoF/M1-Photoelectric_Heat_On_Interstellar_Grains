@@ -42,7 +42,7 @@ def askFile(file = None):
 
 def plotEnergy(file):
     y = []
-    events = [0,0,0,0]
+    events = [0,0,0,0,0]
     start = time.time()
     
     with open(file,"r") as res:
@@ -50,14 +50,14 @@ def plotEnergy(file):
             energy = energy.strip()
             if energy == '':
                 continue
-            if energy not in ["None", "-1", "-2", "-3"]:
+            if energy not in ["-1", "-2", "-3","-4"]:
                 try:
                     if float(energy) < 12:
                         y.append(float(energy))
-                        events[3] += 1
+                        events[4] += 1
                 except ValueError:
                     pass
-            elif energy != "None": events[-int(energy)-1] += 1
+            else: events[-int(energy)-1] += 1
     end = time.time()
     print("Elapsed time to read data: ", end - start)
 
@@ -69,7 +69,7 @@ def plotEnergy(file):
     plt.title("Energy of emitted photons"); plt.xlabel("Energie (eV)"); plt.ylabel("Nb electrons emitted")
 
     plt.subplot(122)
-    plt.bar(0,events[0],label="photon passed through the grain"); plt.bar(1,events[1],label="photon was absorbed but no electon was emitted"); plt.bar(2,events[2],label="an electron was emitted but was re-absorbed in the grain"); plt.bar(3,events[3],label="the electron escaped from the grain")
+    plt.bar(0,events[0],label="photon missed the grain"); plt.bar(1,events[1],label="photon passed through the grain"); plt.bar(2,events[2],label="photon was absorbed but no electon was emitted"); plt.bar(3,events[3],label="an electron was emitted but was re-absorbed in the grain"); plt.bar(4,events[4],label="the electron escaped from the grain")
     plt.title("Event proportion"); plt.xlabel("Event type"); plt.ylabel("Number of events"); plt.legend()
 
 
