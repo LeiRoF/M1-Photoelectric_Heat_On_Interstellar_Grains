@@ -1,9 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import throwOnePhoton
-from sys import argv
-import sys
-import time
 from multiprocessing import Pool
 import os
 from numpy import pi # do not remove even if seems to be unused
@@ -14,30 +11,23 @@ def run(grain, count, angle = 0, target = ["rand()","rand()"], verbose = False, 
 
     y = []
     events = np.zeros(4)
-    # Verbose -> simulation sequential on 1 thread
-    if verbose:
-        for i in range(count):
-            if count == 1: energy = throwOnePhoton.run(grain,angle,target,True,name)
-            else: energy = throwOnePhoton.run(grain,angle,target,False,name)
-            if energy not in [None, -1, -2, -3]:
-                y.append(energy)
-                if verbose and count > 1: print("[", i, "] ", round(energy,3), " eV")
-                events[3] += 1
-            elif energy is not None: events[-energy-1] += 1
 
-    # Not Vetbose -> Simulation parrallelized
-    else:
-        list = [(grain,angle,target,False,name)]*count
-        cores = max(os.cpu_count()-1,1)
-        print("Executing simulation on ", cores , " threads")
-        with Pool(cores) as p:
-            p.starmap(throwOnePhoton.run,list)
+    list = [(grain,angle,target,False,name)]*count
+    cores = os.cpu_count()
+    print("Executing simulation on ", cores , " threads")
+    with Pool(cores) as p:
+        res = p.starmap(throwOnePhoton.run,list)
+    for energy in res:
+        if energy not in [None, -1, -2, -3]:
+            y.append(energy)
+            events[3] += 1
+        elif energy is not None: events[-energy-1] += 1
 
-    if verbose & count > 1:
+    if verbose and count > 1: #verbose allow to show results of this specific simulation (instead of showing results of all simulation stored in the same file)
         
         plt.figure(num=name)
         plt.subplot(121)
-        plt.hist(y,bins=min(50,int(len(y)/10)))
+        plt.hist(y,bins=max(min(50,int(len(y)/10)),3))
         plt.title("Energy of emitted photons"); plt.xlabel("Energie (eV)"); plt.ylabel("Nb electrons emitted")
         
         plt.subplot(122)
@@ -47,7 +37,7 @@ def run(grain, count, angle = 0, target = ["rand()","rand()"], verbose = False, 
 
 if __name__ == "__main__":
     import run
-    run.simulation("example.txt",1000,"rand()*2*pi",["rand()","rand()"],True)
+    run.simulation("example.txt",10000,"rand()*2*pi",["rand()","rand()"],True)
     plt.show()
     
     

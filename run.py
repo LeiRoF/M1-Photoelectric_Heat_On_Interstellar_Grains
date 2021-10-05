@@ -18,6 +18,11 @@ def endProgram(reason="interrupted"):
     else:print("\nProgram interrupted.")
     sys.exit()
 
+def checkExampleGrain():
+    if not os.path.isfile("grains/example.txt"):
+        print("Generating example grain...")
+        G.generate(N = 100, sigma_dens = 0.5, beta = 0.5, path = "./grains/", doplot = 0, writeFile = True, verbose = False, id3D = 0, name="example")
+
 def askGrains():
     grains = []
     names = []
@@ -37,9 +42,7 @@ def askGrains():
                 list = input("\nSelect grain file (must be present in the 'grains' folder and not contain space or comma) or a file list separeted with a comma. Write 'all' to run simulation on every file in the 'grains' folder. You can generate one using: python grain.py\n\nYour file [example.txt]: ")
                 if list == "":
                     print("example.txt")
-                    if not os.path.isfile("grains/example.txt"):
-                        print("Generating example grain...")
-                        G.generate(N = 100, sigma_dens = 1.0, beta = 3.0, path = "./grains/", doplot = 0, writeFile = True, verbose = False, id3D = 0, name="example")
+                    checkExampleGrain()
                     grains.append(G.getFromFile("grains/example.txt"))
                     names.append("example") # Getting file name
                     print("\nSelected file(s):")
@@ -189,6 +192,8 @@ def simulation(file = None, count = None, angle = None, target = [], verbose = N
         grains, names = askGrains()
     else:
         if type(file) == str : file = [file]
+        if "example.txt" in file:
+            checkExampleGrain()
         grains = []
         names = []
         for i in file:

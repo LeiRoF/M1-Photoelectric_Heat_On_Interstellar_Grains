@@ -7,6 +7,15 @@ import os
 from GRF_routines import addGRF
 from multiprocessing import Pool
 
+def reduceMatrix(grain):
+
+    mask = grain == 0
+    rows = np.flatnonzero((~mask).sum(axis=1))
+    cols = np.flatnonzero((~mask).sum(axis=0))
+
+    crop = grain[rows.min():rows.max()+1, cols.min():cols.max()+1]
+    return crop
+
 def askParameters(N, sigma_dens, beta):
     # size of the grain image (default = 100)
     if not N:
@@ -214,7 +223,8 @@ def generate(N = None, sigma_dens = None, beta = None, path = "./grains/", doplo
         else:
             name = name + ".txt"
 
-        np.savetxt(path + name, grain2)
+        grain2 = reduceMatrix(grain2)
+        np.savetxt(path + name, grain2, fmt='%i')
 
     if (doplot>=1):
         pl.figure(figsize=(20,10))
