@@ -27,7 +27,7 @@ Helpers:
 .. toctree::
    :maxdepth: 2
 
-   getting_started.md
+   getting_started.rst
 
 .. toctree::
    :maxdepth: 2
