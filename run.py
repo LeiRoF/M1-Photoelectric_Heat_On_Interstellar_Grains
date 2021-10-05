@@ -9,9 +9,9 @@ from os import listdir, cpu_count
 import matplotlib.pyplot as plt
 from cpuinfo import get_cpu_info
 
-from numpy import pi # do not remove even if seems to be unused
+import numpy as np # do not remove even if seems to be unused
+from numpy import pi, cos, sin, tan, exp, ln, arcsin, arccos, arctan, sinh, cosh, tanh, arcsinh, arccosh, arctanh, sqrt, round # do not remove even if seems to be unused
 from numpy.random.mtrand import rand # do not remove even if seems to be unused
-
 
 
 #--------------------------------------------------
@@ -65,9 +65,15 @@ def askGrains():
     # Look at parameters given in argument in the python command
     try:
         file = argv[1]
-        if file[0] == file[-1] in ["'",'"']: file = file[1:-2]
-        grains.append(getFromFile("grains/" + file))
-        names.append(splitext(file)[0])
+        # Removing list delimiter
+        if (file[0:1] == "'[" and file[-2:-1] == "]'") or (file[0:1] == '"[' and file[-2:-1] == ']"'): file = file[2:-3]
+        
+        list = file.split(",")
+        for file in list:
+            # Removing files delimiters
+            if file[0] == file[-1] in ["'",'"']: file = file[1:-2]
+            grains.append(getFromFile("grains/" + file))
+            names.append(splitext(file)[0])
         return grains,names
 
     # Possible errors

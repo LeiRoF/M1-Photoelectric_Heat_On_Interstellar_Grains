@@ -11,29 +11,6 @@ Purpose
 
 The main objective of this program is to study the photoelectric effect on dust grain in space, and how this effect impact the heating of a gaz cloud.
 
-Installation
-------------
-
-This project was made with **Python 3.9** and can not run correctly in previous versions.
-
-1) Get the source code
-
-.. code-block::
-
-   git clone https://gitlab.com/LeiRoF/Photoelectric_Heating_On_Interstallar_Grains.git
-
-2) Go in the source folder
-
-.. code-block::
-
-   cd Photoelectric_Heating_On_Interstallar_Grains
-
-3) Install project dependencies
-
-.. code-block::
-
-   pip install -r requirements.txt
-
 Credits
 -------
 
@@ -46,6 +23,11 @@ Helpers:
 
 - Enzo
 - Yara
+
+.. toctree::
+   :maxdepth: 2
+
+   getting_started.md
 
 .. toctree::
    :maxdepth: 2

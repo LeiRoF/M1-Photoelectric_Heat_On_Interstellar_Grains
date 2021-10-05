@@ -4,9 +4,9 @@ from throwOnePhoton import throwOnePhoton
 from multiprocessing import Pool
 from os import cpu_count
 
-from numpy import pi # do not remove even if seems to be unused
+import numpy as np # do not remove even if seems to be unused
+from numpy import pi, cos, sin, tan, exp, ln, arcsin, arccos, arctan, sinh, cosh, tanh, arcsinh, arccosh, arctanh, sqrt, round # do not remove even if seems to be unused
 from numpy.random.mtrand import rand # do not remove even if seems to be unused
-
 
 def throwManyPhotons(grain, count, angle = 0, target = ["rand()","rand()"], verbose = False, name = "grain"):
 
