@@ -12,7 +12,7 @@ Purpose
 The main objective of this program is to study the photoelectric effect on dust grain in space, and how this effect impact the heating of a gaz cloud.
 
 Credits
--------
+~~~~~~~
 
 Developers: 
 
@@ -28,6 +28,9 @@ Helpers:
    :maxdepth: 2
 
    getting_started.rst
+
+Files documentation
+-------------------
 
 .. toctree::
    :maxdepth: 2
