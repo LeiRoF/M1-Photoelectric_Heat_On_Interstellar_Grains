@@ -1,32 +1,5 @@
-Getting started
-===============
-
-Installation
-------------
-
-This project was made with **Python 3.9** and can not run correctly in
-previous versions.
-
-1. Get the source code
-
-.. code-block:: bash
-
-    git clone https://gitlab.com/LeiRoF/Photoelectric_Heating_On_Interstallar_Grains.git
-
-2. Go in the source folder
-
-.. code-block:: bash
-
-    cd Photoelectric_Heating_On_Interstallar_Grains
-
-3. Install project dependencies
-
-.. code-block:: bash
-
-    pip install -r requirements.txt
-
 Start
------
+=====
 
 You have 3 ways to run a simulation:
 
@@ -37,7 +10,7 @@ You have 3 ways to run a simulation:
     try.
 
 **Guided**
-~~~~~~~~~~
+----------
 
 In a command-line terminal, execute the following command:
 
@@ -48,12 +21,12 @@ In a command-line terminal, execute the following command:
 The programm will ask you to enter your desired paramters.
 
 **Direct / In script**
-~~~~~~~~~~~~~~~~~~~~~~
+----------------------
 
 You can specify all or a part of these parameters by adding them after
 the command:
 
-.. code-block:: python
+.. code-block::
 
     python run.py [files] [count] [angle] [x] [y] [verbose]
 
@@ -113,7 +86,7 @@ Every parameters that are not precised here will be asked to the user.
     The verbose mode can slow down the simulation.
 
 **Integrated as python module**
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-------------------------------
 
 To import a program as a module, put the source folder next to your
 program and add the following line in your program:

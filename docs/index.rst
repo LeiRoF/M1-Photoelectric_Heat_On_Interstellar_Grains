@@ -24,10 +24,14 @@ Helpers:
 - Enzo
 - Yara
 
+Getting Started
+
 .. toctree::
    :maxdepth: 2
 
-   getting_started.rst
+   :caption: Files documentation
+
+   installation.rst
 
 Files documentation
 -------------------
