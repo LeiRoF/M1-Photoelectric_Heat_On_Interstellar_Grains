@@ -9,8 +9,8 @@ You have 3 ways to run a simulation:
     **can't be manually stopped**. Try to increment the complexity of the simulation progressively. 1000 photons is the maximum recommanded for the first
     try.
 
-**Guided**
-----------
+Guided
+--------
 
 In a command-line terminal, execute the following command:
 
@@ -20,8 +20,8 @@ In a command-line terminal, execute the following command:
 
 The programm will ask you to enter your desired paramters.
 
-**Direct / In script**
-----------------------
+Direct / In script
+------------------
 
 You can specify all or a part of these parameters by adding them after
 the command:
@@ -85,8 +85,8 @@ Every parameters that are not precised here will be asked to the user.
 
     The verbose mode can slow down the simulation.
 
-**Integrated as python module**
--------------------------------
+Integrated as python module
+---------------------------
 
 To import a program as a module, put the source folder next to your
 program and add the following line in your program:
