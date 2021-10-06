@@ -222,6 +222,7 @@ def generate(N = None, sigma_dens = None, beta = None, path = "./grains/", doplo
 
     mmax = np.nonzero(cube==np.amax(cube))
     grain2 = group(grain, mmax[0][0], mmax[1][0], N, doplot)
+    grain2 = reduceMatrix(grain2)
 
     # Write down the grain image in ASCII format (very inefficient format, but easy to control)
     if writeFile:
@@ -233,7 +234,6 @@ def generate(N = None, sigma_dens = None, beta = None, path = "./grains/", doplo
         else:
             name = name + ".txt"
 
-        grain2 = reduceMatrix(grain2)
         np.savetxt(path + name, grain2, fmt='%i')
 
     if (doplot>=1):
@@ -320,8 +320,8 @@ def getIonisationEnergy(grain = None, Nc = None):
 
 if __name__ == "__main__":
 
-    #generate3D(writeFile=True)
-    #"""
+    generate3D(writeFile=True)
+    """
     _,_,name = generate(None, None, None,doplot=1)
 
     grain = getFromFile("grains/" + name)
