@@ -1,42 +1,18 @@
 from genericpath import isfile
-from throwManyPhotons import throwManyPhotons
 from sys import argv
 from sys import exit
 from time import time
-from grain import getFromFile, generate
 from os.path import isfile, splitext
-from os import listdir, cpu_count
-import matplotlib.pyplot as plt
-from cpuinfo import get_cpu_info
+from os import listdir
+from utils import endProgram, CPUcount, CPUinfo
+
+import grain
+import throwManyPhotons
+
 
 import numpy as np # do not remove even if seems to be unused
 from numpy import pi, cos, sin, tan, exp, log, arcsin, arccos, arctan, sinh, cosh, tanh, arcsinh, arccosh, arctanh, sqrt, round # do not remove even if seems to be unused
 from numpy.random.mtrand import rand # do not remove even if seems to be unused
-
-
-#--------------------------------------------------
-# End program messages
-#--------------------------------------------------
-
-
-
-def endProgram(reason="interrupted"):
-    if reason == "noGrain": print("\n[Error] No grain found. You can generate a grain by running the following command: python grain.py")
-    else:print("\nProgram interrupted.")
-    exit()
-
-
-#--------------------------------------------------
-# Get CPU infos
-#--------------------------------------------------
-
-
-
-def getCPU():
-    print("\nGetting CPU info...")
-    cpuInfo = get_cpu_info()["brand_raw"]
-    print("-> ",cpuInfo)
-    return cpuInfo.replace(" ","_")
 
 
 
@@ -49,7 +25,7 @@ def getCPU():
 def checkExampleGrain():
     if not isfile("grains/example.txt"):
         print("Generating example grain...")
-        generate(N = 100, sigma_dens = 0.5, beta = 0.5, path = "./grains/", doplot = 0, writeFile = True, verbose = False, id3D = 0, name="example")
+        grain.generate(N = 100, sigma_dens = 0.5, beta = 0.5, path = "./grains/", doplot = 0, writeFile = True, verbose = False, id3D = 0, name="example")
 
 
 
@@ -72,13 +48,13 @@ def askGrains():
         for file in list:
             # Removing files delimiters
             if file[0] == file[-1] in ["'",'"']: file = file[1:-2]
-            grains.append(getFromFile("grains/" + file))
+            grains.append(grain.getFromFile("grains/" + file))
             names.append(splitext(file)[0])
         return grains,names
 
     # Possible errors
     except FileNotFoundError:
-        print('\n[ERROR] File "', argv[1] ,'" not found.\n   Correct syntax: python throwManyPhotons.py [filename (string)] [count (int)] [angle (float or lambda)] [verbose (bool)]\nMore information on https://photoelectric-heating-on-interstallar-grains.readthedocs.io/en/latest/throwManyPhotons.html')
+        print('\n[ERROR] File "', argv[1] ,'" not found.\n   Correct syntax: python run.py [filename (string)] [count (int)] [angle (float or lambda)] [verbose (bool)]\nMore information on https://photoelectric-heating-on-interstallar-grains.readthedocs.io/en/latest/run.html')
         exit()
     except IndexError:
         pass
@@ -93,7 +69,7 @@ def askGrains():
             if list == "":
                 print("example.txt")
                 checkExampleGrain()
-                grains.append(getFromFile("grains/example.txt"))
+                grains.append(grain.getFromFile("grains/example.txt"))
                 names.append("example") # Getting file name
                 print("\nSelected file(s):")
                 print(" - example.txt")
@@ -104,12 +80,13 @@ def askGrains():
                 print("\nSelected file(s):")
                 for file in listdir("./grains/"):
                     print(" - " + file)
-                    grains.append(getFromFile("grains/" + file))
+                    grains.append(grain.getFromFile("grains/" + file))
                     names.append(splitext(file)[0]) # Getting file name
                 return grains, names
 
             # If the user specify each files
             else:
+                if (list[0:1] == "'[" and list[-2:-1] == "]'") or (list[0:1] == '"[' and list[-2:-1] == ']"'): list = list[2:-3]
                 list.replace(" ","").split(",")
                 if type(list) is str: list = [list]
                 print("\nSelected file(s):")
@@ -117,7 +94,7 @@ def askGrains():
                     if file[-4:] != ".txt":
                         file += ".txt"
                     print(" - " + file)
-                    grains.append(getFromFile("grains/" + file))
+                    grains.append(grain.getFromFile("grains/" + file))
                     names.append(splitext(file)[0])
                 return grains, names
 
@@ -145,7 +122,7 @@ def askCount():
 
     # Possible errors
     except ValueError:
-        print('\n[ERROR] "count" parameter must be an integer.\n   Correct syntax: python throwManyPhotons.py [filename (string)] [count (int)] [angle (float or lambda)] [verbose (bool)]\nMore information on https://photoelectric-heating-on-interstallar-grains.readthedocs.io/en/latest/throwManyPhotons.html')
+        print('\n[ERROR] "count" parameter must be an integer.\n   Correct syntax: python run.py [filename (string)] [count (int)] [angle (float or lambda)] [verbose (bool)]\nMore information on https://photoelectric-heating-on-interstallar-grains.readthedocs.io/en/latest/run.html')
         exit(1)
     except IndexError:
         pass
@@ -190,7 +167,7 @@ def askAngle():
     except IndexError:
         pass
     except:
-        print('\n[ERROR] "angle" parameter not correct. It must be a number or an expression that can be evaluated by python (ex: rand() * 2 * pi)\n   Correct syntax: python throwManyPhotons.py [filename (string)] [count (int)] [angle (float or lambda)] [verbose (bool)]\nMore information on https://photoelectric-heating-on-interstallar-grains.readthedocs.io/en/latest/throwManyPhotons.html')
+        print('\n[ERROR] "angle" parameter not correct. It must be a number or an expression that can be evaluated by python (ex: rand() * 2 * pi)\n   Correct syntax: python run.py [filename (string)] [count (int)] [angle (float or lambda)] [verbose (bool)]\nMore information on https://photoelectric-heating-on-interstallar-grains.readthedocs.io/en/latest/run.html')
         raise
  
     # No argument, so the program will directly ask the user
@@ -233,7 +210,7 @@ def askTarget():
     except IndexError:
         pass
     except:
-        print('\n[ERROR] "Tx" parameter not correct. It must be a number or an expression that can be evaluated by python (ex: rand() * 2 * pi)\n   Correct syntax: python throwManyPhotons.py [filename (string)] [count (int)] [angle (float or lambda)] [verbose (bool)]\nMore information on https://photoelectric-heating-on-interstallar-grains.readthedocs.io/en/latest/throwManyPhotons.html')
+        print('\n[ERROR] "Tx" parameter not correct. It must be a number or an expression that can be evaluated by python (ex: rand() * 2 * pi)\n   Correct syntax: python run.py [filename (string)] [count (int)] [angle (float or lambda)] [verbose (bool)]\nMore information on https://photoelectric-heating-on-interstallar-grains.readthedocs.io/en/latest/run.html')
         raise
 
     # No argument for Tx, so the program will directly ask the user
@@ -285,7 +262,7 @@ def askVerbose():
 
     # Possible errors
     except ValueError:
-        print('\n[ERROR] "verbose" parameter must be set to "True" or "False".\n   Correct syntax: python throwManyPhotons.py [filename (string)] [count (int)] [angle (float or lambda)] [verbose (bool)]\nMore information on https://photoelectric-heating-on-interstallar-grains.readthedocs.io/en/latest/throwManyPhotons.html')
+        print('\n[ERROR] "verbose" parameter must be set to "True" or "False".\n   Correct syntax: python run.py [filename (string)] [count (int)] [angle (float or lambda)] [verbose (bool)]\nMore information on https://photoelectric-heating-on-interstallar-grains.readthedocs.io/en/latest/run.html')
         exit(1)
     except IndexError:
         pass
@@ -325,7 +302,7 @@ def simulation(file = None, count = None, angle = None, target = [], verbose = N
         grains = []
         names = []
         for i in file:
-            grains.append(getFromFile("grains/" + i))
+            grains.append(grain.getFromFile("grains/" + i))
             names.append(splitext(i)[0].split("/")[-1].split("\\")[-1])
     if len(grains) == 0: endProgram(reason="noGrain")
     
@@ -341,20 +318,20 @@ def simulation(file = None, count = None, angle = None, target = [], verbose = N
             stats.write("program_version number_of_photon grain_size number_of_threads time_ellapsed cpu_info\n")
 
     if not verbose:
-        cpu = getCPU()
+        cpu = CPUinfo()
         stats = open("timeStats.dat","a")
 
     # Run simulation for each grain (1 grain = 1 file given in parameter)
     for i in range(len(grains)):
         print("\nRunning simulation n°",i+1,"/",len(grains),":",names[i])
         simuTime = time()
-        throwManyPhotons(grains[i], count, angle = angle, target=target, verbose = verbose, name=names[i])
+        throwManyPhotons.throwManyPhotons(grains[i], count, angle = angle, target=target, verbose = verbose, name=names[i])
         simuTime = time() - simuTime
 
         # Adding data to timeStats if verbose is disabled (verbose mode can affect the simulation time)
         if not verbose:
             print("\nSimulation time: ", simuTime)
-            stats.write("1.0 " + str(count) + " " + str(len(grains[i])) + " " + str(min(count,cpu_count())) + " " + str(round(simuTime,3)) + " " + cpu + "\n")
+            stats.write("1.0 " + str(count) + " " + str(len(grains[i])) + " " + str(min(count,CPUcount())) + " " + str(round(simuTime,3)) + " " + cpu + "\n")
 
     if not verbose: stats.close()
 

@@ -6,6 +6,9 @@ import pylab as pl
 import os
 from GRF_routines import addGRF
 from multiprocessing import Pool
+from run import endProgram
+from sys import argv
+from utils import CPUcount
 
 def reduceMatrix(grain):
 
@@ -26,44 +29,92 @@ def squarify(grain,val = 0):
         padding=((0,b-a),(0,0))
     return np.pad(grain,padding,mode='constant',constant_values=val)
 
-def askParameters(N, sigma_dens, beta):
-    # size of the grain image (default = 100)
-    if not N:
-        lock = True
-        while lock:
-            N = input("Size of the grain (int>0, default:100): ")
-            try:
-                N = int(N)
-                lock = False
-            except ValueError:
-                print("Invalid value")
+def askSize():
+    # Look at parameters given in argument in the python command
+    try:
+        N = int(argv[1])
+        return N
 
-    # Width of the density distribution (default = 1.0)
-    if not sigma_dens:
-        lock = True
-        while lock:
-            sigma_dens = input("Width of the density distribution (float>0, default:1.0): ")
-            try:
-                sigma_dens = float(sigma_dens)
-                lock = False
-            except ValueError:
-                print("Invalid value")
+    # Possible errors
+    except ValueError:
+        print("\n[ERROR] 'Size' must be a positive integer.\n   Correct syntax: python grain.py [size] [sigma_dens] [beta]\nMore information on https://photoelectric-heating-on-interstallar-grains.readthedocs.io/en/latest/grain.html")
+        exit()
+    except IndexError:
+        pass
 
-    # Slope of the power spectrum (=probability density function=PDF) for k>Kmin (default = 3.0)
-    if not beta:
-        lock = True
-        while lock:
-            beta = input("Slope of the power spectrum (float>0, default:3.0): ")
-            try:
-                beta = float(beta)
-                lock = False
-            except ValueError:
-                print("Invalid value")
+    # No argument, so the program will directly ask the user
+    while True:
+        try:
+            N = input("Size of the grain (int>0) [100]: ")
+            if N == "": N = 100
+            N = int(N)
+            return N
+        except ValueError:
+            print("Invalid value.")
+        except KeyboardInterrupt:
+            endProgram()
 
-    return N, sigma_dens, beta
+def askSigmaDens():
+    # Look at parameters given in argument in the python command
+    try:
+        sigma_dens = float(argv[2])
+        return sigma_dens
+
+    # Possible errors
+    except ValueError:
+        print("\n[ERROR] 'Beta_dens' must be a positive float.\n   Correct syntax: python grain.py [size] [sigma_dens] [beta]\nMore information on https://photoelectric-heating-on-interstallar-grains.readthedocs.io/en/latest/grain.html")
+        exit()
+    except IndexError:
+        pass
+
+    # No argument, so the program will directly ask the user
+    while True:
+        try:
+            sigma_dens = input("Width of the density distribution (float>0) [1.0]: ")
+            if sigma_dens == "": sigma_dens = 1.0
+            sigma_dens = float(sigma_dens)
+            return sigma_dens
+        except ValueError:
+            print("Invalid value")
+        except KeyboardInterrupt:
+            endProgram()
+
+def askBeta():
+    # Look at parameters given in argument in the python command
+    try:
+        beta = float(argv[3])
+        return beta
+
+    # Possible errors
+    except ValueError:
+        print("\n[ERROR] 'Beta' must be a positive float.\n   Correct syntax: python grain.py [size] [sigma_dens] [beta]\nMore information on https://photoelectric-heating-on-interstallar-grains.readthedocs.io/en/latest/grain.html")
+        exit()
+    except IndexError:
+        pass
+
+    # No argument, so the program will directly ask the user
+    while True:
+        try:
+            beta = input("Slope of the power spectrum (float>0) [default:3.0]: ")
+            if beta == "": beta = 3.0
+            beta = float(beta)
+            return beta
+        except ValueError:
+            print("Invalid value")
+        except KeyboardInterrupt:
+            endProgram()
+    
+
+    
+
+    
 
 def generate3D(N = None, sigma_dens = None, beta = None, path = "./grains/", doplot = 0, writeFile = True, verbose = False, name = None):
-    N, sigma_dens, beta = askParameters(N, sigma_dens, beta)
+    
+    if N is None: N = askSize()
+    if sigma_dens is None: sigma_dens = askSigmaDens()
+    if beta is None: beta = askBeta()
+
     if N % 2 == 1: N = N+1
 
     poolParameter = []
@@ -74,7 +125,7 @@ def generate3D(N = None, sigma_dens = None, beta = None, path = "./grains/", dop
             if size % 2 == 1: size = size+1
             poolParameter.append((size, sigma_dens, beta, path, 0, False, False, i))
 
-    cores = max(os.cpu_count()-1,1)
+    cores = max(CPUcount()-1,1)
     print("Generating grain on ", cores , " threads")
     with Pool(cores) as p:
         grain = p.starmap(generate,poolParameter)
@@ -165,7 +216,10 @@ def generate(N = None, sigma_dens = None, beta = None, path = "./grains/", doplo
         representative of the fractal parameters. Only a statistically significant
         sample can provide a reliable view of the underlying properties. 
     """
-    N, sigma_dens, beta = askParameters(N, sigma_dens, beta)
+    if N is None: N = askSize()
+    if sigma_dens is None: sigma_dens = askSigmaDens()
+    if beta is None: beta = askBeta()
+
     if N % 2 == 1: N = N+1
 
     # Tunable parameters

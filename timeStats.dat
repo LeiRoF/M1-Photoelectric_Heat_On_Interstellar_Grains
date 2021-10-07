@@ -1,1 +1,3 @@
 program_version number_of_photon grain_size number_of_threads time_ellapsed cpu_info
+1.0 1000 73 16 3.117 AMD_Ryzen_7_2700X_Eight-Core_Processor
+1.0 1000 73 16 3.287 AMD_Ryzen_7_2700X_Eight-Core_Processor

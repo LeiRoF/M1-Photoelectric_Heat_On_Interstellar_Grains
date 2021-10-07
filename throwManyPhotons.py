@@ -1,9 +1,10 @@
 from numpy import zeros
 import matplotlib.pyplot as plt
-from throwOnePhoton import throwOnePhoton
 from multiprocessing import Pool
 from os import cpu_count
 import data
+
+import throwOnePhoton
 
 import numpy as np # do not remove even if seems to be unused
 from numpy import pi, cos, sin, tan, exp, log, arcsin, arccos, arctan, sinh, cosh, tanh, arcsinh, arccosh, arctanh, sqrt, round # do not remove even if seems to be unused
@@ -20,9 +21,10 @@ def throwManyPhotons(grain, count, angle = 0, target = ["rand()","rand()"], verb
     cores = min(count,cpu_count())
     print("Executing simulation on ", cores , " threads")
     with Pool(cores) as p:
-        p.starmap(throwOnePhoton,list)
+        p.starmap(throwOnePhoton.throwOnePhoton,list)
 
-    if verbose: data.plotEnergy("resulsts/" + name + ".dat")
+    print("")
+    if verbose and count > 1: data.analyse(["results/" + name + ".dat"])
 
 if __name__ == "__main__":
     import run

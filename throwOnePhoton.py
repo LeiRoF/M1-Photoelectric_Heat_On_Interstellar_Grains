@@ -8,6 +8,8 @@ from numpy import pi, cos, sin, tan, exp, log, arcsin, arccos, arctan, sinh, cos
 from numpy.random.mtrand import rand # do not remove even if seems to be unused
 
 
+
+
 def isAbsorbed(grain, dist, Rx, Ry, Dx, Dy, step= 0.1):
     hitPos = []
 
@@ -27,6 +29,8 @@ def isAbsorbed(grain, dist, Rx, Ry, Dx, Dy, step= 0.1):
 
 def throwOnePhoton(grain, angle = 0, target = ["rand()","rand()"], verbose = False, name="grain", minimalVerbose = False):
 
+    if not os.path.isdir("results"):
+        os.makedirs("results")
     result = open("results/" + name + ".dat","a")
     E = 3+rand()*12 # Photon energy 3 < E < 15 eV
     Ei = G.getIonisationEnergy(grain)
@@ -56,9 +60,6 @@ def throwOnePhoton(grain, angle = 0, target = ["rand()","rand()"], verbose = Fal
     # Coordinates of the photon when it appear on the matrix
     Rx = Tx - Dx * A
     Ry = Ty - Dy * A
-
-    if not os.path.isdir("results"):
-        os.makedirs("results")
 
     if verbose:
         print("\n  - A photon appeared at Rx=", round(Rx,3), ", Ry=", round(Ry,3))
