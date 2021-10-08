@@ -33,7 +33,7 @@ def throwManyPhotons(grain, count, angle = 0, target = ["rand()","rand()"], verb
 
 if __name__ == "__main__":
     import run
-    run.simulation("example.txt",1000,"rand()*2*pi",["rand()","rand()"],True)
+    run.simulation("example.txt",1000,"rand()*2*pi",["rand()","rand()"],True,temperature=28890,name="example")
     
     
     

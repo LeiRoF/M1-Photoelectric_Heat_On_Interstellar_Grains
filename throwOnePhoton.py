@@ -27,7 +27,7 @@ def throwOnePhoton(grain, angle = ["rand()*2*pi","rand()*pi"], target = ["rand()
     if type(angle) == str: angle = [angle]
     if dim == 2:
         phi = eval(angle[0])
-        theta = pi
+        theta = pi/2
         (sizeX,sizeY) = grain.shape
         size = sqrt(sizeX*sizeX+sizeY*sizeY)
     
@@ -181,5 +181,5 @@ def throwOnePhoton(grain, angle = ["rand()*2*pi","rand()*pi"], target = ["rand()
 if __name__ == "__main__":
 
     import run
-    run.simulation("example.txt",1,"rand()*2*pi",["rand()","rand()"],True)
+    run.simulation("example.txt",1,"rand()*2*pi",["rand()","rand()"],True,temperature=28890,name="example")
     

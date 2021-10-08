@@ -51,8 +51,8 @@ def isAbsorbedV2(grain, dist, Rx, Ry, Dx, Dy, step= 0.1):
 
 
 def isAbsorbed(grain, dist, Rx, Ry, Dx, Dy, step= 0.1):
-    return isAbsorbedV2(grain, dist, Rx, Ry, Dx, Dy, step)
-    
+    #return isAbsorbedV2(grain, dist, Rx, Ry, Dx, Dy, step)
+
     hitPos = []
 
     traj = []
