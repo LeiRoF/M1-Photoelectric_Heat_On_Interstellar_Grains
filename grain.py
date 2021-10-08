@@ -9,111 +9,37 @@ from multiprocessing import Pool
 from run import endProgram
 from sys import argv
 from utils import CPUcount
+from os.path import isfile
+from matrix import *
 
-def reduceMatrix(grain):
-
-    mask = grain == 0
-    rows = np.flatnonzero((~mask).sum(axis=1))
-    cols = np.flatnonzero((~mask).sum(axis=0))
-
-    crop = grain[rows.min():rows.max()+1, cols.min():cols.max()+1]
+import ask
 
 
-    return squarify(crop)
 
-def squarify(grain,val = 0):
-    (a,b)=grain.shape
-    if a>b:
-        padding=((0,0),(0,a-b))
-    else:
-        padding=((0,b-a),(0,0))
-    return np.pad(grain,padding,mode='constant',constant_values=val)
+#--------------------------------------------------
+# Generate example grain if it doesn't exist
+#--------------------------------------------------
 
-def askSize():
-    # Look at parameters given in argument in the python command
-    try:
-        N = int(argv[1])
-        return N
 
-    # Possible errors
-    except ValueError:
-        print("\n[ERROR] 'Size' must be a positive integer.\n   Correct syntax: python grain.py [size] [sigma_dens] [beta]\nMore information on https://photoelectric-heating-on-interstallar-grains.readthedocs.io/en/latest/grain.html")
-        exit()
-    except IndexError:
-        pass
 
-    # No argument, so the program will directly ask the user
-    while True:
-        try:
-            N = input("Size of the grain (int>0) [100]: ")
-            if N == "": N = 100
-            N = int(N)
-            return N
-        except ValueError:
-            print("Invalid value.")
-        except KeyboardInterrupt:
-            endProgram()
-
-def askSigmaDens():
-    # Look at parameters given in argument in the python command
-    try:
-        sigma_dens = float(argv[2])
-        return sigma_dens
-
-    # Possible errors
-    except ValueError:
-        print("\n[ERROR] 'Beta_dens' must be a positive float.\n   Correct syntax: python grain.py [size] [sigma_dens] [beta]\nMore information on https://photoelectric-heating-on-interstallar-grains.readthedocs.io/en/latest/grain.html")
-        exit()
-    except IndexError:
-        pass
-
-    # No argument, so the program will directly ask the user
-    while True:
-        try:
-            sigma_dens = input("Width of the density distribution (float>0) [1.0]: ")
-            if sigma_dens == "": sigma_dens = 1.0
-            sigma_dens = float(sigma_dens)
-            return sigma_dens
-        except ValueError:
-            print("Invalid value")
-        except KeyboardInterrupt:
-            endProgram()
-
-def askBeta():
-    # Look at parameters given in argument in the python command
-    try:
-        beta = float(argv[3])
-        return beta
-
-    # Possible errors
-    except ValueError:
-        print("\n[ERROR] 'Beta' must be a positive float.\n   Correct syntax: python grain.py [size] [sigma_dens] [beta]\nMore information on https://photoelectric-heating-on-interstallar-grains.readthedocs.io/en/latest/grain.html")
-        exit()
-    except IndexError:
-        pass
-
-    # No argument, so the program will directly ask the user
-    while True:
-        try:
-            beta = input("Slope of the power spectrum (float>0) [default:3.0]: ")
-            if beta == "": beta = 3.0
-            beta = float(beta)
-            return beta
-        except ValueError:
-            print("Invalid value")
-        except KeyboardInterrupt:
-            endProgram()
+def checkExampleGrain():
+    if not isfile("grains/example.txt"):
+        print("Generating example grain...")
+        generate(N = 100, sigma_dens = 0.5, beta = 0.5, path = "./grains/", doplot = 0, writeFile = True, verbose = False, id3D = 0, name="example")
     
 
-    
 
-    
+#--------------------------------------------------
+# Generate grain
+#--------------------------------------------------
 
-def generate3D(N = None, sigma_dens = None, beta = None, path = "./grains/", doplot = 0, writeFile = True, verbose = False, name = None):
+
+
+def generate3D(N = None, sigma_dens = None, beta = None, path = "./grains/", doplot = 0, writeFile = True, verbose = False, name = None): # Deprecated
     
-    if N is None: N = askSize()
-    if sigma_dens is None: sigma_dens = askSigmaDens()
-    if beta is None: beta = askBeta()
+    if N is None: N = ask.grainSize()
+    if sigma_dens is None: sigma_dens = ask.sigmaDens()
+    if beta is None: beta = ask.beta()
 
     if N % 2 == 1: N = N+1
 
@@ -168,10 +94,16 @@ def generate3D(N = None, sigma_dens = None, beta = None, path = "./grains/", dop
                     file.write(" ".join([str(x) for x in row]) + "\n")
                     
     return
-    
 
+
+
+#--------------------------------------------------
 # Identify the pixels attached to the main region
-def group(grain, x0,y0, N, doplot = 0):
+#--------------------------------------------------
+
+
+
+def group(grain, x0,y0, N, doplot = 0, z0 = None):
     # Warning: no precaution for edges
     goon = 1
     progress = np.zeros(np.shape(grain))
@@ -197,10 +129,21 @@ def group(grain, x0,y0, N, doplot = 0):
             for inds in searchind:
                 inds = np.asarray(inds)
                 if ((np.all(inds>=0)) & (np.all(inds<N))):
-                    if (grain[inds[0],inds[1]]==1):
-                        if (progress[inds[0],inds[1]]==0): # not found before
-                            progress[inds[0],inds[1]] = 3   # 3 for freshly identified
-                            goon = 1
+                    if z0 is None: # 2D
+                        if (grain[inds[0],inds[1]]==1):
+                            if (progress[inds[0],inds[1]]==0): # not found before
+                                progress[inds[0],inds[1]] = 3   # 3 for freshly identified
+                                goon = 1
+                    else: # 3D
+
+                        """
+                        
+                        TODO
+                        
+                        """
+                        pass
+
+
         if (doplot==2): pl.imshow(progress, origin='low', cmap='bone', interpolation='nearest')
         if (doplot==2): pl.pause(0.0001)
         progress[m] = 1
@@ -210,15 +153,16 @@ def group(grain, x0,y0, N, doplot = 0):
     pl.ioff()
     return progress
 
-def generate(N = None, sigma_dens = None, beta = None, path = "./grains/", doplot = 0, writeFile = True, verbose = False, id3D = 0, name = None):
+def generate(N = None, sigma_dens = None, beta = None, path = "./grains/", doplot = 0, writeFile = True, verbose = False, id3D = 0, name = None, in3D = None):
     """
     N.B.: the grains are generated randomly => a single grain is not necessarily 
         representative of the fractal parameters. Only a statistically significant
         sample can provide a reliable view of the underlying properties. 
     """
-    if N is None: N = askSize()
-    if sigma_dens is None: sigma_dens = askSigmaDens()
-    if beta is None: beta = askBeta()
+    if in3D is None: in3D = ask.in3D()
+    if N is None: N = ask.grainSize()
+    if sigma_dens is None: sigma_dens = ask.sigmaDens()
+    if beta is None: beta = ask.beta()
 
     if N % 2 == 1: N = N+1
 
@@ -237,7 +181,8 @@ def generate(N = None, sigma_dens = None, beta = None, path = "./grains/", doplo
     while ((mmax[0]<N*tol) | (mmax[0]>N*(1-tol)) | (mmax[1]<N*tol) | (mmax[1]>N*(1-tol))):
 
         # Build a fractal cube using Gaussian Random Field
-        cube = np.zeros((N,N))
+        if in3D: cube = np.zeros((N,N,N))
+        else: cube = np.zeros((N,N))
         cube = addGRF(cube, sigma_dens, Adens, beta, Npad, Kmin, beta_in)
 
         # Search the location of the max value
@@ -255,8 +200,12 @@ def generate(N = None, sigma_dens = None, beta = None, path = "./grains/", doplo
     #cube = np.roll(cube, N/2-mmax[1][0], axis=1)
 
     # Apodize the cube
-    I, J = np.indices(np.shape(cube))
-    Rad = (I-N/2)**2+(J-N/2)**2
+    if in3D:
+        I, J, K = np.indices(np.shape(cube))
+        Rad = (I-N/2)**2+(J-N/2)**2+(K-N/2)**2
+    else:
+        I, J = np.indices(np.shape(cube))
+        Rad = (I-N/2)**2+(J-N/2)**2
     sig = N*0.03
     cube *= np.exp(-Rad/(2*sig**2))
 
@@ -284,7 +233,8 @@ def generate(N = None, sigma_dens = None, beta = None, path = "./grains/", doplo
             os.makedirs(path)
 
         if name is None:
-            name = "2D-N{}_S{}p{}_B{}p{}.txt".format(int(N),int(sigma_dens),int(sigma_dens*10%10),int(beta),int(beta*10%10))
+            if in3D: name = "3D-N{}_S{}p{}_B{}p{}.txt".format(int(N),int(sigma_dens),int(sigma_dens*10%10),int(beta),int(beta*10%10))
+            else: name = "2D-N{}_S{}p{}_B{}p{}.txt".format(int(N),int(sigma_dens),int(sigma_dens*10%10),int(beta),int(beta*10%10))
         else:
             name = name + ".txt"
 
@@ -314,7 +264,12 @@ def generate(N = None, sigma_dens = None, beta = None, path = "./grains/", doplo
 
 
 
-# Convert a grain stored in a txt file in an numpy.array
+#--------------------------------------------------
+# Grain tools
+#--------------------------------------------------
+
+
+
 def getFromFile(file):
     """
     Convert txt file to numpy array
@@ -326,6 +281,7 @@ def getSize(grain):
     """
     Get radius
     """
+    return getSizeV2(grain)
 
     cpt = 0
     for row in grain:
@@ -345,15 +301,11 @@ def getSize(grain):
 
     return abs(max - min)/2 if type(min) == type(max) == int else None
 
-
-
-def getCorrectedSize(grain):
+def getSizeV2(grain):
     """
     Get corrected radius
     """
-
     area = 0
-
     # Getting area occuped by the grain
     for row in grain:
         for pixel in row:
@@ -361,10 +313,11 @@ def getCorrectedSize(grain):
                 area += 1
 
     # Area = pi * R^2 -> R =
+    print("HELLO WORLD",np.sqrt(area / np.pi)) 
     return np.sqrt(area / np.pi)
 
 def getNbCarbon(grain = None, size = None):
-    if type(grain) is np.ndarray: return 0.5*((getSize(grain))**3)
+    if type(grain) is np.ndarray: return 0.5*(getSize(grain)**3)
     if size: return 0.5*((size/(10**(-10)))**3)
 
 def getIonisationEnergy(grain = None, Nc = None):
@@ -374,12 +327,10 @@ def getIonisationEnergy(grain = None, Nc = None):
 
 if __name__ == "__main__":
 
-    generate3D(writeFile=True)
-    """
     _,_,name = generate(None, None, None,doplot=1)
 
     grain = getFromFile("grains/" + name)
-    size = getCorrectedSize(grain)
+    size = getSize(grain)
     Nc = getNbCarbon(size=size)
     Ei = getIonisationEnergy(Nc = Nc)
 
@@ -398,4 +349,3 @@ if __name__ == "__main__":
     print("Ionisation energy = ", Ei, " eV")
 
     pl.show()
-    #"""

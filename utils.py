@@ -43,3 +43,6 @@ def CPUinfo():
         cpuInfo = get_cpu_info()["brand_raw"]
         print("-> ",cpuInfo)
         return cpuInfo.replace(" ","_")
+
+
+
