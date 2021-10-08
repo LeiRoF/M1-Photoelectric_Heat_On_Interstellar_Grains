@@ -36,7 +36,7 @@ def askFile():
             # If user want to use the example grain
             if list == "":
                 print("example.dat")
-                list = ["grains/example.dat"]
+                list = ["results/example.dat"]
                 print("\nSelected file(s):")
                 print(" - example.dat")
                 return list

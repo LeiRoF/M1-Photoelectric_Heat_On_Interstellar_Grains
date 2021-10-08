@@ -4,6 +4,7 @@ from numpy.random.mtrand import rand
 import numpy as np
 import os
 from multiprocessing import Pool
+import math
 
 distrib = lambda n: np.exp(-n/100) / 100
 minimum = 0
@@ -13,7 +14,17 @@ number_of_test = 10000
 
 
 # Generate a random variable according to a distribution
-def random(f, min=0, max=1):
+
+def randomV2(f,min=0,max=1,precision=0.001):
+
+    x = np.arange(min,max,precision)
+
+    p = f(x)
+    return np.random.choice(x,p=p/np.sum(p))
+
+def random(f, min=0, max=1, precision = 0.001):
+    return randomV2(f,min,max,precision)
+
     if not callable(f): f = distrib # only used for tests
     x = min + rand()*(max-min)
     u = rand()
@@ -23,13 +34,9 @@ def random(f, min=0, max=1):
     return x
 
 # Return 2 lists, x and fx that can be easily plotted
-def plot(distrib, min, max, step = 1):
-
+def plot(f, min, max, step = 1):
     x = np.arange(min,max,step)
-    fx = []
-    for i in x: fx.append(distrib(i))
-
-    return x,fx
+    return x,f(x)
 
 if __name__ == "__main__":
 

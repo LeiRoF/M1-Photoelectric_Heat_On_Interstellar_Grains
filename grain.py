@@ -364,11 +364,11 @@ def getCorrectedSize(grain):
     return np.sqrt(area / np.pi)
 
 def getNbCarbon(grain = None, size = None):
-    if type(grain) is np.ndarray: return 0.5*((getSize(grain)/(10**(-10)))**3)
+    if type(grain) is np.ndarray: return 0.5*((getSize(grain))**3)
     if size: return 0.5*((size/(10**(-10)))**3)
 
 def getIonisationEnergy(grain = None, Nc = None):
-    Z = -1 # for electrons, cf. Bakes & Tielens paper page 828
+    Z = 0 # cf. Bakes & Tielens paper page 828
     if type(grain) is np.ndarray: return 4.4 + (Z + 1/2) * 25.1 / np.sqrt(getNbCarbon(grain)) # cf. Bakes & Tielens paper page 828, formula 24
     if Nc: return 4.4 + (Z + 1/2) * 25.1 / np.sqrt(Nc) # cf. Bakes & Tielens paper page 828, formula 24
 

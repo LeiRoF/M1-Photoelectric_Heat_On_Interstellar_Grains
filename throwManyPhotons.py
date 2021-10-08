@@ -1,7 +1,7 @@
 from numpy import zeros
 import matplotlib.pyplot as plt
 from multiprocessing import Pool
-from os import cpu_count
+from utils import CPUcount
 import data
 
 import throwOnePhoton
@@ -18,10 +18,15 @@ def throwManyPhotons(grain, count, angle = 0, target = ["rand()","rand()"], verb
     makeVerbose = count == 1 and verbose == True
     minimalVerbose = count > 1 and verbose == True
     list = [(grain,angle,target,makeVerbose,name,minimalVerbose)]*count
-    cores = min(count,cpu_count())
+
+    cores = min(count,CPUcount())
     print("Executing simulation on ", cores , " threads")
-    with Pool(cores) as p:
-        p.starmap(throwOnePhoton.throwOnePhoton,list)
+
+    if cores > 1:
+        with Pool(cores) as p:
+            p.starmap(throwOnePhoton.throwOnePhoton,list)
+    else:
+        throwOnePhoton.throwOnePhoton(grain,angle,target,makeVerbose,name,minimalVerbose)
 
     print("")
     if verbose and count > 1: data.analyse(["results/" + name + ".dat"])
