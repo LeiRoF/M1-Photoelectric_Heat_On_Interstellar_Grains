@@ -1,5 +1,6 @@
 import numpy as np
 
+# Remove empty line and columns
 def reduceMatrix(grain):
 
     mask = grain == 0
@@ -8,9 +9,9 @@ def reduceMatrix(grain):
 
     crop = grain[rows.min():rows.max()+1, cols.min():cols.max()+1]
 
-
     return squarify(crop)
 
+# Make matrix square
 def squarify(grain,val = 0):
     (a,b)=grain.shape
     if a>b:

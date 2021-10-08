@@ -313,12 +313,11 @@ def getSizeV2(grain):
                 area += 1
 
     # Area = pi * R^2 -> R =
-    print("HELLO WORLD",np.sqrt(area / np.pi)) 
     return np.sqrt(area / np.pi)
 
 def getNbCarbon(grain = None, size = None):
     if type(grain) is np.ndarray: return 0.5*(getSize(grain)**3)
-    if size: return 0.5*((size/(10**(-10)))**3)
+    if size: return 0.5*((size)**3)
 
 def getIonisationEnergy(grain = None, Nc = None):
     Z = 0 # cf. Bakes & Tielens paper page 828
@@ -337,10 +336,6 @@ if __name__ == "__main__":
     bad_size = getSize(grain)
     bad_Nc = getNbCarbon(size=bad_size)
     bad_Ei = getIonisationEnergy(Nc = bad_Nc)
-
-    print("Uncorrected Size = ", round(bad_size,3), " Angstroms")
-    print("Uncorrected Number of carbons = {:.3e}".format(bad_Nc))
-    print("Uncorrected Ionisation energy = ", bad_Ei, " eV")
 
     print("")
     
