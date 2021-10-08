@@ -345,6 +345,48 @@ def grains():
 
 
 #--------------------------------------------------
+# Ask star temperature to user
+#--------------------------------------------------
+
+
+
+def temperature():
+
+    # Look at parameters given in argument in the python command
+    try:
+        global n
+        temperature = float(argv[n])
+        if temperature < 0: temperature = -temperature
+        n += 1
+        return temperature
+
+    # Possible errors
+    except ValueError:
+        print('\n[ERROR] "temperature" parameter must be a positive float.\n   Correct syntax: python run.py [name (string)] [filename (string)] [temperature (float)] [count (int)] [angle phi (float or lambda)] [angle theta (float or lambda)] [target x (float)] [target y (float)] [target z (float)] [verbose (bool)]\nMore information on https://photoelectric-heating-on-interstallar-grains.readthedocs.io/en/latest/run.html')
+        exit(1)
+    except IndexError:
+        pass
+
+    # No argument, so the program will directly ask the user
+    while True:
+        try:
+            temperature = input("\nTemperature of the star in Kelvin [28 890]: ")
+            if temperature == "": temperature = 28890; print("28890 (5 times the temperature of our sun)")
+            temperature = float(temperature)
+            if temperature < 0 :
+                raise
+            else:
+                return temperature
+    
+        # Possible errors
+        except KeyboardInterrupt:
+            endProgram()
+        except:
+            print("\n[Error] Incorrect value. You must enter a positive integer.")
+
+
+
+#--------------------------------------------------
 # Ask count to user
 #--------------------------------------------------
 
@@ -361,7 +403,7 @@ def count():
 
     # Possible errors
     except ValueError:
-        print('\n[ERROR] "count" parameter must be an integer.\n   Correct syntax: python run.py [filename (string)] [count (int)] [angle (float or lambda)] [verbose (bool)]\nMore information on https://photoelectric-heating-on-interstallar-grains.readthedocs.io/en/latest/run.html')
+        print('\n[ERROR] "count" parameter must be an integer.\n   Correct syntax: python run.py [name (string)] [filename (string)] [temperature (float)] [count (int)] [angle phi (float or lambda)] [angle theta (float or lambda)] [target x (float)] [target y (float)] [target z (float)] [verbose (bool)]\nMore information on https://photoelectric-heating-on-interstallar-grains.readthedocs.io/en/latest/run.html')
         exit(1)
     except IndexError:
         pass
@@ -408,7 +450,7 @@ def angle():
     except IndexError:
         pass
     except:
-        print('\n[ERROR] "phi" parameter not correct. It must be a number or an expression that can be evaluated by python (ex: rand()*2*pi)\n   Correct syntax: python run.py [filename (string)] [count (int)] [angle (float or lambda)] [verbose (bool)]\nMore information on https://photoelectric-heating-on-interstallar-grains.readthedocs.io/en/latest/run.html')
+        print('\n[ERROR] "phi" parameter not correct. It must be a number or an expression that can be evaluated by python (ex: rand()*2*pi)\n   Correct syntax: python run.py [name (string)] [filename (string)] [temperature (float)] [count (int)] [angle phi (float or lambda)] [angle theta (float or lambda)] [target x (float)] [target y (float)] [target z (float)] [verbose (bool)]\nMore information on https://photoelectric-heating-on-interstallar-grains.readthedocs.io/en/latest/run.html')
         raise
  
     # No argument, so the program will directly ask the user
@@ -443,7 +485,7 @@ def angle():
     except IndexError:
         pass
     except:
-        print('\n[ERROR] "tehta" parameter not correct. It must be a number or an expression that can be evaluated by python (ex: rand()*pi)\n   Correct syntax: python run.py [filename (string)] [count (int)] [angle (float or lambda)] [verbose (bool)]\nMore information on https://photoelectric-heating-on-interstallar-grains.readthedocs.io/en/latest/run.html')
+        print('\n[ERROR] "tehta" parameter not correct. It must be a number or an expression that can be evaluated by python (ex: rand()*pi)\n   Correct syntax: python run.py [name (string)] [filename (string)] [temperature (float)] [count (int)] [angle phi (float or lambda)] [angle theta (float or lambda)] [target x (float)] [target y (float)] [target z (float)] [verbose (bool)]\nMore information on https://photoelectric-heating-on-interstallar-grains.readthedocs.io/en/latest/run.html')
         raise
  
     # No argument, so the program will directly ask the user
@@ -496,7 +538,7 @@ def target():
     except IndexError:
         pass
     except:
-        print('\n[ERROR] "Tx" parameter not correct. It must be a number or an expression that can be evaluated by python (ex: rand() * 2 * pi)\n   Correct syntax: python run.py [filename (string)] [count (int)] [angle (float or lambda)] [verbose (bool)]\nMore information on https://photoelectric-heating-on-interstallar-grains.readthedocs.io/en/latest/run.html')
+        print('\n[ERROR] "Tx" parameter not correct. It must be a number or an expression that can be evaluated by python (ex: rand() * 2 * pi)\n   Correct syntax: python run.py [name (string)] [filename (string)] [temperature (float)] [count (int)] [angle phi (float or lambda)] [angle theta (float or lambda)] [target x (float)] [target y (float)] [target z (float)] [verbose (bool)]\nMore information on https://photoelectric-heating-on-interstallar-grains.readthedocs.io/en/latest/run.html')
         raise
 
     # No argument for Tx, so the program will directly ask the user
@@ -568,7 +610,7 @@ def verbose():
 
     # Possible errors
     except ValueError:
-        print('\n[ERROR] "verbose" parameter must be set to "True" or "False".\n   Correct syntax: python run.py [filename (string)] [count (int)] [angle (float or lambda)] [verbose (bool)]\nMore information on https://photoelectric-heating-on-interstallar-grains.readthedocs.io/en/latest/run.html')
+        print('\n[ERROR] "verbose" parameter must be set to "True" or "False".\n   Correct syntax: python run.py [name (string)] [filename (string)] [temperature (float)] [count (int)] [angle phi (float or lambda)] [angle theta (float or lambda)] [target x (float)] [target y (float)] [target z (float)] [verbose (bool)]\nMore information on https://photoelectric-heating-on-interstallar-grains.readthedocs.io/en/latest/run.html')
         exit(1)
     except IndexError:
         pass

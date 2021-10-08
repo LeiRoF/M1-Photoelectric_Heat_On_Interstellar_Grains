@@ -17,7 +17,7 @@ import ask
 
 
 
-def simulation(file = None, count = None, angle = None, target = [], verbose = None, name = None):
+def simulation(file = None, count = None, angle = None, target = [], verbose = None, name = None, temperature = None):
 
     if name is None : name = ask.name()
 
@@ -38,6 +38,7 @@ def simulation(file = None, count = None, angle = None, target = [], verbose = N
     if len(grains) == 0: endProgram(reason="noGrain")
     
     # Asking each parameter to the user if they was not given in parameter of this function
+    if temperature is None : temperature = ask.temperature()
     if count is None : count = ask.count()
     if angle is None : angle = ask.angle()
     if target == [] : target = ask.target()
