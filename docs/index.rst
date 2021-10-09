@@ -18,9 +18,15 @@ Welcome to the Photoelectric Heating On Interstallar Grains documentation!
    :maxdepth: 2
    :caption: Files documentation
 
-   run.md
-   grain.md
+   ask.rst
+   bulk.rst
    data.md
    distrib.md
-   throwOnePhoton.md
+   grain.md
+   isAbsorbed.rst
+   matrix.rst
+   photon.rst
+   run.md
    throwManyPhotons.md
+   throwOnePhoton.md
+   utils.rst
