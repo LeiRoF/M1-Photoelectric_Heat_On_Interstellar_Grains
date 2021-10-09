@@ -17,22 +17,28 @@ import ask
 
 
 
-def simulation(file = None, count = None, angle = None, target = [], verbose = None, name = None, temperature = None):
+def simulation(fileList = None, count = None, angle = None, target = [], verbose = None, name = None, temperature = None):
+
+    grains = []
+    names = []
 
     if name is None : name = ask.name()
 
     # If no file(s) given in parameter of the function, get it/them from the user
-    if file is None:
+    if fileList is None:
         grains, names = ask.grains()
+
+    elif fileList.lower() in ["a", "all"]:
+        for i in listdir("./grains/"):
+            grains.append(grain.getFromFile("grains/" + i))
+            names.append(splitext(i)[0]) # Getting file name
 
     # Else, get the grain from give file(s)
     else:
-        if type(file) == str : file = [file]
-        if "example.txt" in file:
+        if type(fileList) == str : fileList = [fileList]
+        if "example.txt" in fileList:
             grain.checkExampleGrain()
-        grains = []
-        names = []
-        for i in file:
+        for i in fileList:
             grains.append(grain.getFromFile("grains/" + i))
             names.append(splitext(i)[0].split("/")[-1].split("\\")[-1])
     if len(grains) == 0: endProgram(reason="noGrain")
@@ -55,10 +61,11 @@ def simulation(file = None, count = None, angle = None, target = [], verbose = N
 
     # Run simulation for each grain (1 grain = 1 file given in parameter)
     for i in range(len(grains)):
-        if len(grains) > 1: name = name + names[i]
+        if len(grains) > 1: simu_name = name + "_" + names[i]
+        else: simu_name = name
         print("\nRunning simulation n°",i+1,"/",len(grains),":",names[i])
         simuTime = time()
-        throwManyPhotons.throwManyPhotons(grains[i], count, angle = angle, target=target, verbose = verbose, name=name)
+        throwManyPhotons.throwManyPhotons(grains[i], count, angle = angle, target=target, verbose = verbose, name=simu_name)
         simuTime = time() - simuTime
 
         # Adding data to timeStats if verbose is disabled (verbose mode can affect the simulation time)
@@ -72,7 +79,6 @@ def simulation(file = None, count = None, angle = None, target = [], verbose = N
 #--------------------------------------------------
 # Start simulation from this file
 #--------------------------------------------------
-
 
 
 if __name__ == "__main__":

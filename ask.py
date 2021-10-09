@@ -238,7 +238,7 @@ def dataFile():
             # If the user want to use all grains
             elif list.lower() in ["a", "all"]:
                 print("\nSelected file(s):")
-                for file in listdir("./grains/"):
+                for file in listdir("./results/"):
                     print(" - " + file)
                     open(file)
                 return list

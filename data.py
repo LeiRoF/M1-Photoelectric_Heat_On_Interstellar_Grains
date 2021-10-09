@@ -11,7 +11,7 @@ def plotEnergy(file):
     y = []
     events = [0,0,0,0,0]
     
-    with open(file,"r") as res:
+    with open("results/" + file,"r") as res:
         for energy in res:
             energy = energy.strip()
             if energy == '':
@@ -39,9 +39,17 @@ def plotEnergy(file):
 
 
 
-def analyse(fileList = None):
+def analyse(fileList = []):
 
-    if fileList is None: fileList = ask.dataFile()
+    if type(fileList) == str:
+        fileList = [fileList]
+    
+        if fileList[0].lower() in ["a", "all"]:
+            fileList = []
+            for file in listdir("./results/"):
+                fileList.append(file)
+
+    if fileList ==[]: fileList = ask.dataFile()
 
     cores = min(len(fileList),CPUcount())
     print("\nAnalysing data on ", cores , " threads")

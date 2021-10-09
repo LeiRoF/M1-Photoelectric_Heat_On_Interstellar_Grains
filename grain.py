@@ -25,7 +25,7 @@ import ask
 def checkExampleGrain():
     if not isfile("grains/example.txt"):
         print("Generating example grain...")
-        generate(N = 100, sigma_dens = 0.5, beta = 0.5, path = "./grains/", doplot = 0, writeFile = True, verbose = False, id3D = 0, name="example")
+        generate(N = 100, sigma_dens = 0.5, beta = 0.5, doplot = 0, writeFile = True, verbose = False, id3D = 0, name="example")
     
 
 
@@ -153,7 +153,7 @@ def group(grain, x0,y0, N, doplot = 0, z0 = None):
     pl.ioff()
     return progress
 
-def generate(N = None, sigma_dens = None, beta = None, path = "./grains/", doplot = 0, writeFile = True, verbose = False, id3D = 0, name = None, in3D = None):
+def generate(N = None, sigma_dens = None, beta = None, doplot = 0, writeFile = True, verbose = False, name = None, in3D = None):
     """
     N.B.: the grains are generated randomly => a single grain is not necessarily 
         representative of the fractal parameters. Only a statistically significant
@@ -229,8 +229,8 @@ def generate(N = None, sigma_dens = None, beta = None, path = "./grains/", doplo
 
     # Write down the grain image in ASCII format (very inefficient format, but easy to control)
     if writeFile:
-        if not os.path.isdir(path):
-            os.makedirs(path)
+        if not os.path.isdir("grains/"):
+            os.makedirs("grains/")
 
         if name is None:
             if in3D: name = "3D-N{}_S{}p{}_B{}p{}.txt".format(int(N),int(sigma_dens),int(sigma_dens*10%10),int(beta),int(beta*10%10))
@@ -238,7 +238,7 @@ def generate(N = None, sigma_dens = None, beta = None, path = "./grains/", doplo
         else:
             name = name + ".txt"
 
-        np.savetxt(path + name, grain2, fmt='%i')
+        np.savetxt("grains/" + name, grain2, fmt='%i')
 
     if (doplot>=1):
         pl.figure(figsize=(20,10))
@@ -260,7 +260,7 @@ def generate(N = None, sigma_dens = None, beta = None, path = "./grains/", doplo
 
         if not __name__ == "__main__": pl.show()   
     
-    return [id3D, grain2, name]
+    return [grain2, name]
 
 
 
@@ -326,7 +326,7 @@ def getIonisationEnergy(grain = None, Nc = None):
 
 if __name__ == "__main__":
 
-    _,_,name = generate(None, None, None,doplot=1)
+    _,_,name = generate(None, None, None, doplot=1)
 
     grain = getFromFile("grains/" + name)
     size = getSize(grain)
