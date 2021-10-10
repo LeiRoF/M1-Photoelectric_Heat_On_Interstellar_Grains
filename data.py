@@ -11,7 +11,7 @@ def plotEnergy(file):
     y = []
     events = [0,0,0,0,0]
     
-    with open("results/" + file,"r") as res:
+    with open(file,"r") as res:
         for energy in res:
             energy = energy.strip()
             if energy == '':

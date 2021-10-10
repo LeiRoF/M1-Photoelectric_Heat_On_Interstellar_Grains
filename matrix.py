@@ -1,7 +1,7 @@
 import numpy as np
 
 # Remove empty line and columns
-def reduceMatrix(grain):
+def reduce(grain):
 
     mask = grain == 0
     rows = np.flatnonzero((~mask).sum(axis=1))
@@ -9,7 +9,7 @@ def reduceMatrix(grain):
 
     crop = grain[rows.min():rows.max()+1, cols.min():cols.max()+1]
 
-    return squarify(crop)
+    return crop
 
 # Make matrix square
 def squarify(grain,val = 0):

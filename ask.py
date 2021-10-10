@@ -285,7 +285,7 @@ def grains():
         for file in list:
             # Removing files delimiters
             if file[0] == file[-1] in ["'",'"']: file = file[1:-2]
-            grains.append(np.loadtxt(file)("grains/" + file))
+            grains.append(np.loadtxt("grains/" + file))
             names.append(splitext(file)[0])
         return grains,names
 
@@ -306,7 +306,7 @@ def grains():
             if list == "":
                 print("example.txt")
                 grain.checkExampleGrain()
-                grains.append(grain.getFromFile("grains/example.txt"))
+                grains.append(np.loadtxt("grains/example.txt"))
                 names.append("example") # Getting file name
                 print("\nSelected file(s):")
                 print(" - example.txt")
@@ -317,7 +317,7 @@ def grains():
                 print("\nSelected file(s):")
                 for file in listdir("./grains/"):
                     print(" - " + file)
-                    grains.append(grain.getFromFile("grains/" + file))
+                    grains.append(np.loadtxt("grains/" + file))
                     names.append(splitext(file)[0]) # Getting file name
                 return grains, names
 
@@ -331,7 +331,7 @@ def grains():
                     if file[-4:] != ".txt":
                         file += ".txt"
                     print(" - " + file)
-                    grains.append(grain.getFromFile("grains/" + file))
+                    grains.append(np.loadtxt("grains/" + file))
                     names.append(splitext(file)[0])
                 return grains, names
 

@@ -20,6 +20,7 @@ def radiation(wav):
 def getPhotonEnergy(verbose = False):
     wavelenght_min = 1 # in nanometer
     wavelenght_max = 1000 # in nanometer
+    
     l = distrib.random(radiation,wavelenght_min*10**-9,wavelenght_max*10**-9,10**-9) # Real star radiation in nanometer
     global h
     global c

@@ -5,7 +5,7 @@ Bulk is an editable python file that allow to easily run several simulations fro
 
 .. warning::
 
-    Depending of your computer, just one simulation can take lot of time. Do not make bulk simulations if you are ot sure about the approximative time it will last.
+    Depending of your computer, just one simulation can take lot of time. Do not make bulk simulations if you are not sure about the approximative time it will last.
 
 Here is the default content of this file. You can edit it to make you own bulk simulations.
 

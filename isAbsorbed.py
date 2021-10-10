@@ -45,13 +45,13 @@ def isAbsorbedV2(grain, dist, Rx, Ry, Dx, Dy, step= 0.1):
     else:
         #t = travelInGrain
         #print(f"V2 Absorbed=False")
-        return True, Rx + travelInGrain*Dx, Ry + travelInGrain*Dy, hit
+        return False, Rx + travelInGrain*Dx, Ry + travelInGrain*Dy, hit
 
 
 
 
 def isAbsorbed(grain, dist, Rx, Ry, Dx, Dy, step= 0.1):
-    #return isAbsorbedV2(grain, dist, Rx, Ry, Dx, Dy, step)
+    return isAbsorbedV2(grain, dist, Rx, Ry, Dx, Dy, step)
 
     hitPos = []
 

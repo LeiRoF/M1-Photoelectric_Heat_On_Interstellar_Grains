@@ -25,7 +25,7 @@ import ask
 def checkExampleGrain():
     if not isfile("grains/example.txt"):
         print("Generating example grain...")
-        generate(N = 100, sigma_dens = 0.5, beta = 0.5, doplot = 0, writeFile = True, verbose = False, id3D = 0, name="example")
+        generate(N = 100, sigma_dens = 0.5, beta = 0.5, doplot = 0, writeFile = True, verbose = False, name="example")
     
 
 
@@ -225,7 +225,8 @@ def generate(N = None, sigma_dens = None, beta = None, doplot = 0, writeFile = T
 
     mmax = np.nonzero(cube==np.amax(cube))
     grain2 = group(grain, mmax[0][0], mmax[1][0], N, doplot)
-    grain2 = reduceMatrix(grain2)
+    grain2 = reduce(grain2)
+    grain2 = squarify(grain2)
 
     # Write down the grain image in ASCII format (very inefficient format, but easy to control)
     if writeFile:
