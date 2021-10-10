@@ -285,7 +285,7 @@ def grains():
         for file in list:
             # Removing files delimiters
             if file[0] == file[-1] in ["'",'"']: file = file[1:-2]
-            grains.append(grain.getFromFile("grains/" + file))
+            grains.append(np.loadtxt(file)("grains/" + file))
             names.append(splitext(file)[0])
         return grains,names
 

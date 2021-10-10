@@ -46,11 +46,7 @@ The retunr can also be `None` if the photon miss the grain.
 
 This function retrieves a path to a file. It then calls the `getGrainFromFile()` function to retrieve the shape of the grain in a variable of type `numpy.array`, which facilitates its exploitation.
 
-This shape is described by a 2D matrix composed of 0 and 1. 0 indicates that the space is empty, 1 indicates that the space is occupied by the grain. Here is a representation in black and white of this matrix:
-
-![](https://vincent.foriel.xyz/wp-content/uploads/2021/09/Capture-decran-2021-09-29-160144.png)
-
-The function will then launch a photon along one of the lines (chosen randomly) of the matrix. From there, a series of events can follow:
+The function will then launch a photon on the grain. From there, a series of events can follow:
 
 * If the photon passes by the grain, nothing happens, the function returns `None`.
 * If the photon hits the grain, a distance `da` is randomly generated according to the probability distribution of the propagation distance of a photon in the grain. This distribution is defined by: `P=exp(-da/la)/la` where `la = 100` or 100 pixels, which corresponds here to 100 angstroms because the function considers that 1 pixel = 1 angstrom.

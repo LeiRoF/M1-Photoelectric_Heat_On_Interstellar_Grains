@@ -260,21 +260,13 @@ def generate(N = None, sigma_dens = None, beta = None, doplot = 0, writeFile = T
 
         if not __name__ == "__main__": pl.show()   
     
-    return [grain2, name]
+    return grain2, name
 
 
 
 #--------------------------------------------------
 # Grain tools
 #--------------------------------------------------
-
-
-
-def getFromFile(file):
-    """
-    Convert txt file to numpy array
-    """
-    return np.loadtxt(file)
 
 
 def getSize(grain):
@@ -326,9 +318,9 @@ def getIonisationEnergy(grain = None, Nc = None):
 
 if __name__ == "__main__":
 
-    _,_,name = generate(None, None, None, doplot=1)
+    _,name = generate(None, None, None, doplot=1)
 
-    grain = getFromFile("grains/" + name)
+    grain = np.loadtxt("grains/" + name)
     size = getSize(grain)
     Nc = getNbCarbon(size=size)
     Ei = getIonisationEnergy(Nc = Nc)

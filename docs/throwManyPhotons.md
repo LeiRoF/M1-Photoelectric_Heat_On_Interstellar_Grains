@@ -37,4 +37,4 @@ No return
 
 ### How it works
 
-This function only consistto call the `throwOnePhoton` function in a loop, and print some informations if `verbose` is set to `True`
+This function only consist to call the `throwOnePhoton` function in a loop, and print some informations if `verbose` is set to `True`

@@ -20,9 +20,9 @@ Welcome to the Photoelectric Heating On Interstallar Grains documentation!
 
    ask.rst
    bulk.rst
-   data.md
+   data.rst
    distrib.md
-   grain.md
+   grain.rst
    isAbsorbed.rst
    matrix.rst
    photon.rst

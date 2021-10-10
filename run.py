@@ -5,6 +5,7 @@ from time import time
 from os.path import isfile, splitext
 from os import listdir
 from utils import endProgram, CPUcount, CPUinfo
+import numpy as np
 
 import grain
 import throwManyPhotons
@@ -30,7 +31,7 @@ def simulation(fileList = None, count = None, angle = None, target = [], verbose
 
     elif fileList.lower() in ["a", "all"]:
         for i in listdir("./grains/"):
-            grains.append(grain.getFromFile("grains/" + i))
+            grains.append(np.loadtxt("grains/" + i))
             names.append(splitext(i)[0]) # Getting file name
 
     # Else, get the grain from give file(s)
@@ -39,7 +40,7 @@ def simulation(fileList = None, count = None, angle = None, target = [], verbose
         if "example.txt" in fileList:
             grain.checkExampleGrain()
         for i in fileList:
-            grains.append(grain.getFromFile("grains/" + i))
+            grains.append(np.loadtxt("grains/" + i))
             names.append(splitext(i)[0].split("/")[-1].split("\\")[-1])
     if len(grains) == 0: endProgram(reason="noGrain")
     

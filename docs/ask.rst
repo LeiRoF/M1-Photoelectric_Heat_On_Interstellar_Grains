@@ -7,7 +7,7 @@ This file contain several functions that check parameters given by the user. It 
 - If this variable is not defined, the function will read ``argv`` list
 - If there is no corresponding ``argv``, the function will ask the parameter to the user
 
-To be more precize, here there is the global usual structure of these functions:
+To be more precize, here is the usual structure of these functions:
 
 .. code-block:: python
 
