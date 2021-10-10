@@ -9,10 +9,10 @@ This file contain several functions that check parameters given by the user. It 
 
 To be more precize, here there is the global usual structure of these functions:
 
-.. code-block::python
+.. code-block:: python
 
     # Check if the value is correct
-    def check(value)
+    def check(value):
         if <condition on value>:
             return true
         else:
