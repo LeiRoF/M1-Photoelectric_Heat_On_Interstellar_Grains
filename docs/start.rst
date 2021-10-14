@@ -9,7 +9,7 @@ You have 3 ways to run a simulation:
 .. warning::
 
     For each way, please keep in mind that the programm will use every core of your processor and
-    **can't be manually stopped**. Try to increment the complexity of the simulation progressively. 1000 photons is the maximum recommanded for the first
+    **can't be manually stopped** (the only way is to kill the parent processus). Try to increment the complexity of the simulation progressively. 1000 photons is the maximum recommanded for the first
     try.
 
 Guided
