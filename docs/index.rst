@@ -10,7 +10,7 @@ Welcome to the Photoelectric Heating On Interstallar Grains documentation!
    :maxdepth: 2
    :caption: Getting started
 
-   about.rst
+   intro.rst
    installation.rst
    start.rst
    physic.rst

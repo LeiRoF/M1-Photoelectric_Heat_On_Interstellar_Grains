@@ -41,3 +41,4 @@ It can be explained by the angle and the target position that can make the photo
 
     The first event type is always 0, but it is actually a bug
 
+However, after making several tests, the spikes on the right side of the histograms seems not bu due to a bug, but I can't explain why it make this, it actually really disturb me...
