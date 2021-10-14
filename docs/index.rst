@@ -37,3 +37,4 @@ Welcome to the Photoelectric Heating On Interstallar Grains documentation!
    :caption: Resulsts
 
    analysis.rst
+   conclusion.rst
