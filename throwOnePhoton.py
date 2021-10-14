@@ -21,8 +21,8 @@ def throwOnePhoton(grain, angle = ["rand()*2*pi","rand()*pi"], target = ["rand()
     result = open("results/" + name + ".dat","a")
     
     dim = grain.ndim
-    #E = getPhotonEnergy(verbose)
-    E = 3 + rand()*12  # 3 <= E <= 15
+    E = getPhotonEnergy(verbose)
+    #E = 3 + rand()*12  # 3 <= E <= 15
     Ei = G.getIonisationEnergy(grain)
 
     if type(angle) == str: angle = [angle]
@@ -144,7 +144,7 @@ def throwOnePhoton(grain, angle = ["rand()*2*pi","rand()*pi"], target = ["rand()
         print("  - The electron's direction is: Dx=", round(Dx,3), " , Dy=", round(Dy,3))
 
     # Getting random distance traveled by the electron using the probability P=exp(-de/le) / le
-    le = 10 # 10^-6 cm = 100 angstrom -> 100 pixels
+    le = 10 # 10^-7 cm = 10 angstrom -> 10 pixels
     de = distrib.random(lambda x: exp(-x/le) / le,0,100)
     if verbose:
         print("  - In these conditions, the electron will travel ", round(de,3), "angstroms through the grain")

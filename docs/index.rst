@@ -13,6 +13,7 @@ Welcome to the Photoelectric Heating On Interstallar Grains documentation!
    about.rst
    installation.rst
    start.rst
+   physic.rst
 
 .. toctree::
    :maxdepth: 2
