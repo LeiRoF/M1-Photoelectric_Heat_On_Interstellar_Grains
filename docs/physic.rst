@@ -8,8 +8,8 @@ The objective of this program is to simulate the photoelectric effect on a dust 
 After generating a grain, throw a photon on it with a certain energy. This energy is mostly determined by the star temperature. We approximate here the radiative spectrum of the star with a black-body radiation spectrum:
 
 .. math::
-
-    B = \frac{2*h*c^2}{\lambda^5 * (e^{\frac{h*c}{\lambda*k*T}}) - 1) )
+    
+    B = \frac{2*h*c^2}{\lambda^5 * (e^{\frac{h*c}{\lambda*k*T}}) - 1)
 
 Where :math:`B` is the spectral radiance (expressed in :math:`W·m−2·sr−1`, :math:`h` and :math:`k` respectively is the Planck and Boltzmann constants, :math:`c` the speed of light, :math:`T` the temperature of the star and :math:`\lambda` the considered wavelength.
 
@@ -21,7 +21,7 @@ The relation between wavelenght and photon energy is given by:
 
     E = h * \frac{c}{\lambda} * 6.242*10^{18}
 
-Where `6.242*10^{18}` allow to express :math:`E` (the energy) in electron-volts, wich is more conveniant to use in this situation than Joules.
+Where :math:`6.242*10^{18}` allow to express :math:`E` (the energy) in electron-volts, wich is more conveniant to use in this situation than Joules.
 
 So, we normalize the expression of :math:`B` to get a density function. Then we chose a random energy value using this density function.
 
@@ -29,9 +29,9 @@ After that, we throw the photon on the grain and see if it will be absorbed. To 
 
 .. math::
 
-    P = \frac{e^{-d_a/I_a}}{I_a}
+    P = e^{-d_a/I_a} * \frac{1}{I_a}
 
-Where :math:`P` represent the density function for to photon to traveling a distance :math:`d_a` in the grain, and :math:`I_a = 100 \angstrom` is the "attenuation distance".
+Where :math:`P` represent the density function for to photon to traveling a distance :math:`d_a` in the grain, and :math:`I_a = 100 Å` is the "attenuation distance".
 
 Again, we generate a random :math:`d_a` value that represent the distance that our photon will be able to travel in the grain. We look at the photon trajectory and if the distance in the grain is upper than :math:`d_a`, the photon is absorbed.
 
@@ -53,9 +53,9 @@ If an electron is emited, as the photon before, it will have to travel into the 
 
 .. math::
 
-    P = \frac{e^{-d_e/I_e}}{I_e}
+    P = e^{-d_e/I_e} * \frac{1}{I_e}
 
-Where :math:`d_e` is the distance that the electron can travel and `I_e = 10 \angstrom` the attenuation factor for the electron.
+Where :math:`d_e` is the distance that the electron can travel and :math:`I_e = 10 Å` the attenuation factor for the electron.
 
 .. image:: https://vincent.foriel.xyz/wp-content/uploads/2021/10/Capture-decran-2021-10-14-160331.png
 
