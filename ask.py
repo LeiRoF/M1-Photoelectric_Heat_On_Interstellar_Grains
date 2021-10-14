@@ -229,7 +229,6 @@ def dataFile():
             
             # If user want to use the example grain
             if list == "":
-                print("example.dat")
                 list = ["results/example.dat"]
                 print("\nSelected file(s):")
                 print(" - example.dat")
@@ -238,9 +237,10 @@ def dataFile():
             # If the user want to use all grains
             elif list.lower() in ["a", "all"]:
                 print("\nSelected file(s):")
+                list = []
                 for file in listdir("./results/"):
                     print(" - " + file)
-                    open(file)
+                    list.append("results/" + file)
                 return list
 
             # If the user specify each files
@@ -249,18 +249,19 @@ def dataFile():
                 list = list.replace(" ","").split(",")
                 if type(list) is str: list = [list]
                 print("\nSelected file(s):")
-                for file in list:
-                    if file[-4:] != ".dat":
-                        file += ".dat"
-                    print(" - " + file)
-                    open(file)
+                for i in range(len(list)):
+                    if list[i][-4:] != ".dat":
+                        list[i] += ".dat"
+                    print(" - " + list[i])
+                    list[i] = "results/" + list[i]
+                    open(list[i])
                 return list
 
         # Possible errors
         except KeyboardInterrupt:
             endProgram()
-        except:
-            print("\n[Error] Cannot open or interprete your file '" + file + "' as a data file")
+        #except:
+            #print("\n[Error] Cannot open or interprete your file '" + file + "' as a data file")
 
 
 

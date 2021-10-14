@@ -21,7 +21,8 @@ def throwOnePhoton(grain, angle = ["rand()*2*pi","rand()*pi"], target = ["rand()
     result = open("results/" + name + ".dat","a")
     
     dim = grain.ndim
-    E = getPhotonEnergy(verbose)
+    #E = getPhotonEnergy(verbose)
+    E = 3 + rand()*12  # 3 <= E <= 15
     Ei = G.getIonisationEnergy(grain)
 
     if type(angle) == str: angle = [angle]

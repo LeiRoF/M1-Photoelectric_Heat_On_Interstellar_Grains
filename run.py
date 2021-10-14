@@ -7,6 +7,8 @@ from os import listdir
 from utils import endProgram, CPUcount, CPUinfo
 import numpy as np
 
+from datetime import datetime
+
 import grain
 import throwManyPhotons
 import ask
@@ -54,7 +56,7 @@ def simulation(fileList = None, count = None, angle = None, target = [], verbose
     # Writing timeStats header
     if not isfile("timeStats.dat"):
         with open("timeStats.dat","a") as stats:
-            stats.write("program_version number_of_photon grain_size number_of_threads time_ellapsed cpu_info\n")
+            stats.write("timestamp number_of_photon grain_size number_of_threads time_ellapsed cpu_info\n")
 
     if not verbose:
         cpu = CPUinfo()
@@ -72,7 +74,7 @@ def simulation(fileList = None, count = None, angle = None, target = [], verbose
         # Adding data to timeStats if verbose is disabled (verbose mode can affect the simulation time)
         if not verbose:
             print("\nSimulation time: ", simuTime)
-            stats.write(str(count) + " " + str(len(grains[i])) + " " + str(min(count,CPUcount())) + " " + str(round(simuTime,3)) + " " + cpu + "\n")
+            stats.write(str(datetime.fromtimestamp(time())).replace(" ","_") + " " + str(count) + " " + str(len(grains[i])) + " " + str(min(count,CPUcount())) + " " + str(round(simuTime,3)) + " " + cpu + "\n")
 
     if not verbose: stats.close()
 
