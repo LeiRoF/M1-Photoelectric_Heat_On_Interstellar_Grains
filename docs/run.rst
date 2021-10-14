@@ -7,7 +7,7 @@ Run.py is the file that manage simulations. It contain only one function that is
 
     python run.py [parameters]
 
-See `Start [start.rst]`_ page to get more information.
+See `Start [start]`_ page to get more information.
 <https://photoelectric-heating-on-interstallar-grains.readthedocs.io/en/latest/start.html>
 
 

@@ -1,6 +1,10 @@
 ask.py
 ======
 
+.. note::
+
+    This file has been built quite recently and will still undergo some modifications. This page describes the file in its final version (if you are reading this, it's because I didn't have time to finish it)
+
 This file contain several functions that check parameters given by the user. It can not be started as a main file and all functions consist in 3 steps:
 
 - Check if the variable given in the parameter is correct and raise an error if it's not the case

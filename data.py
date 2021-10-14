@@ -47,7 +47,7 @@ def analyse(fileList = []):
         if fileList[0].lower() in ["a", "all"]:
             fileList = []
             for file in listdir("./results/"):
-                fileList.append(file)
+                fileList.append("results/"+file)
 
     if fileList ==[]: fileList = ask.dataFile()
 
