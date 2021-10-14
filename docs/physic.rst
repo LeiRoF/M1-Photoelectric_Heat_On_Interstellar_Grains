@@ -23,6 +23,8 @@ The relation between wavelenght and photon energy is given by:
 
 Where :math:`6.242*10^{18}` allow to express :math:`E` (the energy) in electron-volts, wich is more conveniant to use in this situation than Joules.
 
+.. image:: https://vincent.foriel.xyz/wp-content/uploads/2021/10/Capture-decran-2021-10-14-160227.png
+
 So, we normalize the expression of :math:`B` to get a density function. Then we chose a random energy value using this density function.
 
 After that, we throw the photon on the grain and see if it will be absorbed. To do so, we are looking at the following equation:
