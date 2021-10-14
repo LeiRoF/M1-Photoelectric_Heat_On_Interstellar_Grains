@@ -31,3 +31,9 @@ Welcome to the Photoelectric Heating On Interstallar Grains documentation!
    throwManyPhotons.rst
    throwOnePhoton.rst
    utils.rst
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Resulsts
+
+   analysis.rst
