@@ -9,7 +9,7 @@ After generating a grain, throw a photon on it with a certain energy. This energ
 
 .. math::
     
-    B = \frac{2*h*c^2}{\lambda^5 * (e^{\frac{h*c}{\lambda*k*T}}) - 1)
+    B = \frac{2 h c^2}{\lambda^5 (e^{\frac{h c}{\lambda k T}} - 1)}
 
 Where :math:`B` is the spectral radiance (expressed in :math:`W·m−2·sr−1`, :math:`h` and :math:`k` respectively is the Planck and Boltzmann constants, :math:`c` the speed of light, :math:`T` the temperature of the star and :math:`\lambda` the considered wavelength.
 
@@ -19,7 +19,7 @@ The relation between wavelenght and photon energy is given by:
 
 .. math::
 
-    E = h * \frac{c}{\lambda} * 6.242*10^{18}
+    E = h \frac{c}{\lambda} 6.242*10^{18}
 
 Where :math:`6.242*10^{18}` allow to express :math:`E` (the energy) in electron-volts, wich is more conveniant to use in this situation than Joules.
 
@@ -29,7 +29,7 @@ After that, we throw the photon on the grain and see if it will be absorbed. To 
 
 .. math::
 
-    P = e^{-d_a/I_a} * \frac{1}{I_a}
+    P = \frac{1}{I_a} e^{-d_a/I_a}
 
 Where :math:`P` represent the density function for to photon to traveling a distance :math:`d_a` in the grain, and :math:`I_a = 100 Å` is the "attenuation distance".
 
@@ -53,7 +53,7 @@ If an electron is emited, as the photon before, it will have to travel into the 
 
 .. math::
 
-    P = e^{-d_e/I_e} * \frac{1}{I_e}
+    P = \frac{1}{I_e} e^{-d_e/I_e}
 
 Where :math:`d_e` is the distance that the electron can travel and :math:`I_e = 10 Å` the attenuation factor for the electron.
 
@@ -73,7 +73,7 @@ This energy of ionisation is given by:
 
 .. math::
 
-    4.4 + (Z + \frac{1}{2}) * 25.1 / \sqrt{N_c}
+    E_i = 4.4 + (Z + \frac{1}{2}) \frac{25.1}{\sqrt{N_c}} 
 
 Where :math:`N_c` the number of carbon atoms and :math:`Z = 0` is the electronic affinity, here equal to 0 because we consider that our grain as a neutral electric charge.
 
