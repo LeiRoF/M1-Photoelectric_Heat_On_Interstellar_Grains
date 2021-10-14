@@ -1,2 +1,4 @@
 timestamp number_of_photon grain_size number_of_threads time_ellapsed cpu_info
 2021-10-14_14:11:02.314999 1000 76 16 2.185 AMD_Ryzen_7_2700X_Eight-Core_Processor
+2021-10-14_15:03:36.568487 10000 76 8 11.718 11th_Gen_Intel(R)_Core(TM)_i7-1165G7_@_2.80GHz
+2021-10-14_15:03:50.858286 10000 88 8 14.289 11th_Gen_Intel(R)_Core(TM)_i7-1165G7_@_2.80GHz
