@@ -21,12 +21,12 @@ Welcome to the Photoelectric Heating On Interstallar Grains documentation!
    ask.rst
    bulk.rst
    data.rst
-   distrib.md
+   distrib.rst
    grain.rst
    isAbsorbed.rst
    matrix.rst
    photon.rst
-   run.md
-   throwManyPhotons.md
-   throwOnePhoton.md
+   run.rst
+   throwManyPhotons.rst
+   throwOnePhoton.rst
    utils.rst
