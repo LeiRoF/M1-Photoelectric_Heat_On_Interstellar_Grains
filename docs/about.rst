@@ -1,6 +1,8 @@
 About
 =====
 
+.. image:: https://vincent.foriel.xyz/wp-content/uploads/2021/10/Capture-decran-2021-10-14-171229.png
+
 Purpose
 -------
 
