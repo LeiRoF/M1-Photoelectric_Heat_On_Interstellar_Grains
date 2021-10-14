@@ -33,7 +33,7 @@ After that, we throw the photon on the grain and see if it will be absorbed. To 
 
     P = \frac{1}{I_a} e^{-d_a/I_a}
 
-Where :math:`P` represent the density function for to photon to traveling a distance :math:`d_a` in the grain, and :math:`I_a = 100 Å` is the "attenuation distance".
+Where :math:`P` represent the density function for to photon to traveling a distance :math:`d_a` in the grain, and :math:`I_a = 100 Å` is the attenuation distance.
 
 Again, we generate a random :math:`d_a` value that represent the distance that our photon will be able to travel in the grain. We look at the photon trajectory and if the distance in the grain is upper than :math:`d_a`, the photon is absorbed.
 
@@ -82,6 +82,6 @@ Where :math:`N_c` the number of carbon atoms and :math:`Z = 0` is the electronic
 The number of carbon atom is defined by:
 
 .. math::
-    0.5*a^3
+    N_c = 0.5*a^3
 
 Where :math:`a` in angstrom, correspond to the radius of the grain.
