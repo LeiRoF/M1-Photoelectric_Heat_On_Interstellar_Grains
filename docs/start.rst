@@ -1,5 +1,8 @@
+.. _start:
+
 Start
 =====
+
 
 You have 3 ways to run a simulation:
 

@@ -31,6 +31,8 @@ located, then running the following command:
    calculation time. To test the program, it is recommended not to send
    more than 1000 photons.
 
+.. _throwManyPhotons:
+
 throwManyPhotons
 ----------------
 
