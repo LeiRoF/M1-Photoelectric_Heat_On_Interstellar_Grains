@@ -8,7 +8,7 @@ Purpose
 
 The main objective of this program is to study the photoelectric effect on dust grain in space, and how this effect impact the heating of a gaz cloud.
 
-The isead is to modelize a photon that will hit a grain, and emit (or not) an electron with a certain energy. Then, this electron will contribute to the heating of the gaz cloud.
+The idea is to modelize a photon that will hit a grain, and emit (or not) an electron with a certain energy. Then, this electron will contribute to the heating of the gaz cloud.
 
 Credits
 -------
