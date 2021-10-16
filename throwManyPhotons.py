@@ -17,16 +17,15 @@ def throwManyPhotons(grain, count, angle = 0, target = ["rand()","rand()"], verb
 
     makeVerbose = count == 1 and verbose == True
     minimalVerbose = count > 1 and verbose == True
+
+    # Creating a list of parameters that will be used for simulations (1 simulation = 1 photon)
     list = [(grain,angle,target,makeVerbose,name,minimalVerbose)]*count
 
     cores = min(count,CPUcount())
     print("Executing simulation on ", cores , " threads")
 
-    if cores > 1:
-        with Pool(cores) as p:
-            p.starmap(throwOnePhoton.throwOnePhoton,list)
-    else:
-        throwOnePhoton.throwOnePhoton(grain,angle,target,makeVerbose,name,minimalVerbose)
+    with Pool(cores) as p: 
+        p.starmap(throwOnePhoton.throwOnePhoton,list) # Creating pool to parrallelize simulations
 
     print("")
     if verbose and count > 1: data.analyse(["results/" + name + ".dat"])

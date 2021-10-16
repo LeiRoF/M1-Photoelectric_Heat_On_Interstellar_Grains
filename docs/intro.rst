@@ -20,5 +20,5 @@ The program was made by:
 
 With the help of:
 
-- Enzo
-- Yara
+- Enzo Paradis
+- Yara Hariri
